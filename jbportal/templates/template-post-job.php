@@ -37,8 +37,14 @@ if ( $err ) { delete_transient( 'jbportal_post_err_' . $user_id ); }
 					<input type="text" name="job_title" required placeholder="<?php esc_attr_e( 'e.g. Senior Frontend Developer', 'jbportal' ); ?>">
 				</label>
 				<label><?php esc_html_e( 'Job Description', 'jbportal' ); ?>
-					<textarea name="job_description" rows="10" required></textarea>
+					<textarea name="job_description" id="jb-job-description" rows="10" required></textarea>
 				</label>
+				<?php if ( get_option( 'jbportal_ai_enabled' ) === '1' ) : ?>
+				<button type="button" class="jb-btn jb-btn-ghost jb-btn-sm" id="jb-ai-generate" style="margin-top:0.5rem">
+					✨ <?php esc_html_e( 'Generate with AI', 'jbportal' ); ?>
+				</button>
+				<span id="jb-ai-status" style="margin-left:0.75rem;font-size:0.875rem;color:var(--jb-muted);display:none"></span>
+				<?php endif; ?>
 				<div class="jb-grid-2">
 					<label><?php esc_html_e( 'Category', 'jbportal' ); ?>
 						<select name="job_category">

@@ -85,3 +85,93 @@ function jbportal_get_user_meetings( $user_id ) {
 		'order'          => 'ASC',
 	) );
 }
+
+/* ── Reschedule handler ─────────────────────────────────────── */
+
+add_action( 'template_redirect', 'jbportal_handle_reschedule_meeting' );
+function jbportal_handle_reschedule_meeting() {
+	if ( empty( $_POST['jbportal_reschedule_nonce'] ) ) {
+		return;
+	}
+	if ( ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['jbportal_reschedule_nonce'] ) ), 'jbportal_reschedule_meeting' ) ) {
+		return;
+	}
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+
+	$mid      = (int) ( $_POST['meeting_id'] ?? 0 );
+	$datetime = sanitize_text_field( wp_unslash( $_POST['new_meeting_when'] ?? '' ) );
+	if ( ! $mid || ! $datetime ) {
+		return;
+	}
+
+	$meeting    = get_post( $mid );
+	$organizer  = (int) get_post_meta( $mid, '_meeting_organizer', true );
+	$with       = (int) get_post_meta( $mid, '_meeting_with', true );
+	$current_uid = get_current_user_id();
+
+	// Only organizer or the other participant can reschedule.
+	if ( $current_uid !== $organizer && $current_uid !== $with ) {
+		return;
+	}
+
+	update_post_meta( $mid, '_meeting_when', $datetime );
+
+	// Notify the other party.
+	$peer_id = $current_uid === $organizer ? $with : $organizer;
+	$peer    = get_userdata( $peer_id );
+	if ( $peer ) {
+		wp_mail(
+			$peer->user_email,
+			sprintf( __( '[%s] Meeting rescheduled', 'jbportal' ), get_bloginfo( 'name' ) ),
+			sprintf( __( "Your meeting \"%s\" has been rescheduled to: %s", 'jbportal' ), $meeting->post_title, $datetime )
+		);
+	}
+
+	set_transient( 'jbportal_meeting_ok_' . $current_uid, __( 'Meeting rescheduled and other party notified.', 'jbportal' ), 60 );
+	wp_safe_redirect( add_query_arg( 'tab', 'meetings', home_url( '/dashboard/' ) ) );
+	exit;
+}
+
+/* ── Day-before reminder email ──────────────────────────────── */
+
+add_action( 'jbportal_meeting_reminders', 'jbportal_send_meeting_reminders' );
+function jbportal_send_meeting_reminders() {
+	$tomorrow_start = date( 'Y-m-d 00:00:00', strtotime( '+1 day' ) );
+	$tomorrow_end   = date( 'Y-m-d 23:59:59', strtotime( '+1 day' ) );
+
+	$meetings = get_posts( array(
+		'post_type'      => 'jb_meeting',
+		'posts_per_page' => -1,
+		'post_status'    => 'private',
+		'meta_query'     => array(
+			array(
+				'key'     => '_meeting_when',
+				'value'   => array( $tomorrow_start, $tomorrow_end ),
+				'compare' => 'BETWEEN',
+				'type'    => 'DATETIME',
+			),
+		),
+	) );
+
+	foreach ( $meetings as $m ) {
+		$organizer = (int) get_post_meta( $m->ID, '_meeting_organizer', true );
+		$with      = (int) get_post_meta( $m->ID, '_meeting_with', true );
+		$when      = get_post_meta( $m->ID, '_meeting_when', true );
+		$url       = get_post_meta( $m->ID, '_meeting_url', true );
+		$subject   = $m->post_title;
+
+		foreach ( array( $organizer, $with ) as $uid ) {
+			$user = get_userdata( $uid );
+			if ( ! $user ) {
+				continue;
+			}
+			wp_mail(
+				$user->user_email,
+				sprintf( __( '[%s] Reminder: Meeting tomorrow', 'jbportal' ), get_bloginfo( 'name' ) ),
+				sprintf( __( "This is a reminder that your meeting \"%s\" is scheduled for tomorrow:\n\nWhen: %s\nLink: %s", 'jbportal' ), $subject, $when, $url )
+			);
+		}
+	}
+}

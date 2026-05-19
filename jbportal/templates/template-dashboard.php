@@ -62,6 +62,16 @@ get_header();
 				$tabs['invitations']       = __( 'Invitations', 'jbportal' );
 				$tabs['candidate-profile'] = __( 'Candidate Profile', 'jbportal' );
 			}
+			// Services tab for candidates (freelance marketplace).
+			if ( $is_cand || ! $is_emp ) {
+				$tabs['services'] = __( 'My Services', 'jbportal' );
+				$tabs['orders']   = __( 'Orders', 'jbportal' );
+				$tabs['wallet']   = __( 'Wallet', 'jbportal' );
+			}
+			if ( $is_emp ) {
+				$tabs['orders'] = __( 'Service Orders', 'jbportal' );
+			}
+			$tabs['membership'] = __( 'Membership', 'jbportal' );
 			$tabs['messages'] = __( 'Messages', 'jbportal' ) . ( $unread ? ' (' . (int) $unread . ')' : '' );
 			$tabs['profile']  = __( 'Account', 'jbportal' );
 
@@ -317,6 +327,7 @@ get_header();
 						<th><?php esc_html_e( $is_emp ? 'With' : 'Organiser', 'jbportal' ); ?></th>
 						<th><?php esc_html_e( 'When', 'jbportal' ); ?></th>
 						<th><?php esc_html_e( 'Link', 'jbportal' ); ?></th>
+						<th></th>
 					</tr></thead>
 					<tbody>
 					<?php foreach ( $meetings as $m ) :
@@ -332,6 +343,17 @@ get_header();
 							<td><?php echo esc_html( $peer ? $peer->display_name : '—' ); ?></td>
 							<td><?php echo esc_html( $when ? date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $when ) ) : '—' ); ?></td>
 							<td><?php echo $url ? '<a href="' . esc_url( $url ) . '" target="_blank" rel="noopener">' . esc_html__( 'Join', 'jbportal' ) . '</a>' : '—'; ?></td>
+							<td>
+								<details>
+									<summary><?php esc_html_e( 'Reschedule', 'jbportal' ); ?></summary>
+									<form class="jb-form" method="post" style="margin-top:0.5rem">
+										<?php wp_nonce_field( 'jbportal_reschedule_meeting', 'jbportal_reschedule_nonce' ); ?>
+										<input type="hidden" name="meeting_id" value="<?php echo esc_attr( $m->ID ); ?>">
+										<input type="datetime-local" name="new_meeting_when" value="<?php echo esc_attr( $when ? date( 'Y-m-d\TH:i', strtotime( $when ) ) : '' ); ?>" required>
+										<button class="jb-btn jb-btn-primary jb-btn-sm" type="submit"><?php esc_html_e( 'Confirm', 'jbportal' ); ?></button>
+									</form>
+								</details>
+							</td>
 						</tr>
 					<?php endforeach; ?>
 					</tbody>
@@ -440,6 +462,202 @@ get_header();
 
 		<?php elseif ( 'candidate-profile' === $tab ) : ?>
 			<p><a class="jb-btn jb-btn-primary" href="<?php echo esc_url( home_url( '/candidate-profile/' ) ); ?>"><?php esc_html_e( 'Edit your candidate profile →', 'jbportal' ); ?></a></p>
+
+		<?php elseif ( 'services' === $tab ) :
+			$my_services = jbportal_get_user_services( $user->ID );
+			$svc_ok      = get_transient( 'jbportal_svc_ok_' . $user->ID );
+			$svc_err     = get_transient( 'jbportal_svc_err_' . $user->ID );
+			if ( $svc_ok  ) { delete_transient( 'jbportal_svc_ok_'  . $user->ID ); }
+			if ( $svc_err ) { delete_transient( 'jbportal_svc_err_' . $user->ID ); }
+			?>
+			<?php if ( $svc_ok  ) : ?><div class="jb-notice jb-notice-success"><?php echo esc_html( $svc_ok ); ?></div><?php endif; ?>
+			<?php if ( $svc_err ) : ?><div class="jb-notice jb-notice-error"><?php echo esc_html( $svc_err ); ?></div><?php endif; ?>
+
+			<div class="jb-card" style="margin-bottom:2rem">
+				<h3><?php esc_html_e( 'Create a new service', 'jbportal' ); ?></h3>
+				<form class="jb-form" method="post" enctype="multipart/form-data">
+					<?php wp_nonce_field( 'jbportal_service_submit', 'jbportal_service_nonce' ); ?>
+					<label><?php esc_html_e( 'Service Title', 'jbportal' ); ?><input type="text" name="service_title" required></label>
+					<label><?php esc_html_e( 'Description', 'jbportal' ); ?><textarea name="service_description" rows="5" required></textarea></label>
+					<div class="jb-grid-2">
+						<label><?php esc_html_e( 'Price ($)', 'jbportal' ); ?><input type="number" name="service_price" min="1" step="0.01" required></label>
+						<label><?php esc_html_e( 'Delivery (days)', 'jbportal' ); ?><input type="number" name="service_delivery" min="1" value="3"></label>
+					</div>
+					<label class="jb-check"><input type="checkbox" name="service_featured" value="1"> <?php esc_html_e( 'Feature this service', 'jbportal' ); ?></label>
+					<button class="jb-btn jb-btn-primary" type="submit"><?php esc_html_e( 'Publish Service', 'jbportal' ); ?></button>
+				</form>
+			</div>
+
+			<?php if ( $my_services ) : ?>
+				<table class="jb-table">
+					<thead><tr>
+						<th><?php esc_html_e( 'Service', 'jbportal' ); ?></th>
+						<th><?php esc_html_e( 'Price', 'jbportal' ); ?></th>
+						<th><?php esc_html_e( 'Delivery', 'jbportal' ); ?></th>
+						<th><?php esc_html_e( 'Status', 'jbportal' ); ?></th>
+						<th></th>
+					</tr></thead>
+					<tbody>
+					<?php foreach ( $my_services as $svc ) :
+						$price    = (float) get_post_meta( $svc->ID, '_service_price', true );
+						$delivery = (int)   get_post_meta( $svc->ID, '_service_delivery', true );
+						$del_url  = wp_nonce_url( add_query_arg( array( 'jbportal_delete_service' => $svc->ID ) ), 'jbportal_delete_service_' . $svc->ID );
+						?>
+						<tr>
+							<td><a href="<?php echo esc_url( get_permalink( $svc->ID ) ); ?>"><?php echo esc_html( $svc->post_title ); ?></a></td>
+							<td>$<?php echo esc_html( number_format( $price, 2 ) ); ?></td>
+							<td><?php echo esc_html( sprintf( _n( '%d day', '%d days', $delivery, 'jbportal' ), $delivery ) ); ?></td>
+							<td><span class="jb-status jb-status-<?php echo esc_attr( $svc->post_status ); ?>"><?php echo esc_html( $svc->post_status ); ?></span></td>
+							<td><a href="<?php echo esc_url( $del_url ); ?>" class="jb-danger" onclick="return confirm('<?php esc_attr_e( 'Delete this service?', 'jbportal' ); ?>')"><?php esc_html_e( 'Delete', 'jbportal' ); ?></a></td>
+						</tr>
+					<?php endforeach; ?>
+					</tbody>
+				</table>
+			<?php else : ?>
+				<p><?php esc_html_e( 'You haven\'t created any services yet.', 'jbportal' ); ?></p>
+			<?php endif; ?>
+
+		<?php elseif ( 'orders' === $tab ) :
+			$as_seller = jbportal_get_user_service_orders( $user->ID, 'seller' );
+			$as_buyer  = jbportal_get_user_service_orders( $user->ID, 'buyer' );
+			?>
+			<?php if ( $as_seller ) : ?>
+				<h3><?php esc_html_e( 'Orders received', 'jbportal' ); ?></h3>
+				<table class="jb-table">
+					<thead><tr>
+						<th><?php esc_html_e( 'Service', 'jbportal' ); ?></th>
+						<th><?php esc_html_e( 'Buyer', 'jbportal' ); ?></th>
+						<th><?php esc_html_e( 'Amount', 'jbportal' ); ?></th>
+						<th><?php esc_html_e( 'Status', 'jbportal' ); ?></th>
+						<th><?php esc_html_e( 'Date', 'jbportal' ); ?></th>
+					</tr></thead>
+					<tbody>
+					<?php foreach ( $as_seller as $ord ) :
+						$svc_id  = (int) get_post_meta( $ord->ID, '_order_service', true );
+						$buyer_id = (int) get_post_meta( $ord->ID, '_order_buyer', true );
+						$earn    = (float) get_post_meta( $ord->ID, '_order_seller_earn', true );
+						$status  = get_post_meta( $ord->ID, '_order_status', true ) ?: 'pending';
+						$buyer   = get_userdata( $buyer_id );
+						?>
+						<tr>
+							<td><?php echo esc_html( get_the_title( $svc_id ) ); ?></td>
+							<td><?php echo esc_html( $buyer ? $buyer->display_name : '—' ); ?></td>
+							<td>$<?php echo esc_html( number_format( $earn, 2 ) ); ?> <?php esc_html_e( 'earned', 'jbportal' ); ?></td>
+							<td><span class="jb-badge"><?php echo esc_html( $status ); ?></span></td>
+							<td><?php echo esc_html( mysql2date( get_option( 'date_format' ), $ord->post_date ) ); ?></td>
+						</tr>
+					<?php endforeach; ?>
+					</tbody>
+				</table>
+			<?php endif; ?>
+
+			<?php if ( $as_buyer ) : ?>
+				<h3 style="margin-top:2rem"><?php esc_html_e( 'Orders placed', 'jbportal' ); ?></h3>
+				<table class="jb-table">
+					<thead><tr>
+						<th><?php esc_html_e( 'Service', 'jbportal' ); ?></th>
+						<th><?php esc_html_e( 'Seller', 'jbportal' ); ?></th>
+						<th><?php esc_html_e( 'Amount paid', 'jbportal' ); ?></th>
+						<th><?php esc_html_e( 'Status', 'jbportal' ); ?></th>
+						<th><?php esc_html_e( 'Date', 'jbportal' ); ?></th>
+					</tr></thead>
+					<tbody>
+					<?php foreach ( $as_buyer as $ord ) :
+						$svc_id    = (int) get_post_meta( $ord->ID, '_order_service', true );
+						$seller_id = (int) get_post_meta( $ord->ID, '_order_seller', true );
+						$price     = (float) get_post_meta( $ord->ID, '_order_price', true );
+						$status    = get_post_meta( $ord->ID, '_order_status', true ) ?: 'pending';
+						$seller    = get_userdata( $seller_id );
+						?>
+						<tr>
+							<td><?php echo esc_html( get_the_title( $svc_id ) ); ?></td>
+							<td><?php echo esc_html( $seller ? $seller->display_name : '—' ); ?></td>
+							<td>$<?php echo esc_html( number_format( $price, 2 ) ); ?></td>
+							<td><span class="jb-badge"><?php echo esc_html( $status ); ?></span></td>
+							<td><?php echo esc_html( mysql2date( get_option( 'date_format' ), $ord->post_date ) ); ?></td>
+						</tr>
+					<?php endforeach; ?>
+					</tbody>
+				</table>
+			<?php endif; ?>
+			<?php if ( ! $as_seller && ! $as_buyer ) : ?>
+				<p><?php esc_html_e( 'No service orders yet.', 'jbportal' ); ?></p>
+			<?php endif; ?>
+
+		<?php elseif ( 'wallet' === $tab ) :
+			$balance  = jbportal_wallet_balance( $user->ID );
+			$pending  = jbportal_wallet_pending( $user->ID );
+			$wallet_ok  = get_transient( 'jbportal_wallet_ok_'  . $user->ID );
+			$wallet_err = get_transient( 'jbportal_wallet_err_' . $user->ID );
+			if ( $wallet_ok  ) { delete_transient( 'jbportal_wallet_ok_'  . $user->ID ); }
+			if ( $wallet_err ) { delete_transient( 'jbportal_wallet_err_' . $user->ID ); }
+			?>
+			<?php if ( $wallet_ok  ) : ?><div class="jb-notice jb-notice-success"><?php echo esc_html( $wallet_ok ); ?></div><?php endif; ?>
+			<?php if ( $wallet_err ) : ?><div class="jb-notice jb-notice-error"><?php echo esc_html( $wallet_err ); ?></div><?php endif; ?>
+
+			<div class="jb-wallet-summary">
+				<div class="jb-wallet-card">
+					<span class="jb-wallet-label"><?php esc_html_e( 'Available Balance', 'jbportal' ); ?></span>
+					<span class="jb-wallet-amount">$<?php echo esc_html( number_format( $balance, 2 ) ); ?></span>
+				</div>
+				<div class="jb-wallet-card jb-wallet-card-pending">
+					<span class="jb-wallet-label"><?php esc_html_e( 'Pending Earnings', 'jbportal' ); ?></span>
+					<span class="jb-wallet-amount">$<?php echo esc_html( number_format( $pending, 2 ) ); ?></span>
+				</div>
+			</div>
+
+			<?php if ( $balance > 0 ) : ?>
+			<div class="jb-card" style="margin-top:2rem">
+				<h3><?php esc_html_e( 'Request Withdrawal', 'jbportal' ); ?></h3>
+				<form class="jb-form" method="post">
+					<?php wp_nonce_field( 'jbportal_withdrawal', 'jbportal_withdrawal_nonce' ); ?>
+					<label><?php esc_html_e( 'Amount ($)', 'jbportal' ); ?><input type="number" name="withdrawal_amount" min="1" max="<?php echo esc_attr( $balance ); ?>" step="0.01" required></label>
+					<label><?php esc_html_e( 'Payment Method', 'jbportal' ); ?>
+						<select name="withdrawal_method">
+							<option value="paypal">PayPal</option>
+							<option value="bank"><?php esc_html_e( 'Bank Transfer', 'jbportal' ); ?></option>
+							<option value="wise">Wise</option>
+						</select>
+					</label>
+					<label><?php esc_html_e( 'Account Detail (email / IBAN)', 'jbportal' ); ?><input type="text" name="withdrawal_detail" required></label>
+					<button class="jb-btn jb-btn-primary" type="submit"><?php esc_html_e( 'Request Withdrawal', 'jbportal' ); ?></button>
+				</form>
+			</div>
+			<?php endif; ?>
+
+		<?php elseif ( 'membership' === $tab ) :
+			$plan_name  = get_user_meta( $user->ID, 'jb_plan_name',    true );
+			$plan_exp   = get_user_meta( $user->ID, 'jb_plan_expires', true );
+			$apply_lim  = jbportal_membership_limit( $user->ID, 'apply' );
+			$apply_used = (int) get_user_meta( $user->ID, 'jb_apply_count', true );
+			$svc_lim    = jbportal_membership_limit( $user->ID, 'services' );
+			$svc_used   = (int) get_user_meta( $user->ID, 'jb_services_count', true );
+			$cv_lim     = jbportal_membership_limit( $user->ID, 'cv_downloads' );
+			$cv_used    = (int) get_user_meta( $user->ID, 'jb_cv_downloads', true );
+			?>
+			<div class="jb-card">
+				<h3><?php esc_html_e( 'Current Plan', 'jbportal' ); ?></h3>
+				<?php if ( $plan_name ) : ?>
+					<p><strong><?php echo esc_html( $plan_name ); ?></strong>
+					<?php if ( $plan_exp ) : ?>
+						— <?php echo esc_html( sprintf( __( 'Expires: %s', 'jbportal' ), date_i18n( get_option( 'date_format' ), strtotime( $plan_exp ) ) ) ); ?>
+					<?php endif; ?>
+					</p>
+					<table class="jb-table" style="margin-top:1rem">
+						<thead><tr><th><?php esc_html_e( 'Feature', 'jbportal' ); ?></th><th><?php esc_html_e( 'Used', 'jbportal' ); ?></th><th><?php esc_html_e( 'Limit', 'jbportal' ); ?></th></tr></thead>
+						<tbody>
+							<tr><td><?php esc_html_e( 'Job Applications', 'jbportal' ); ?></td><td><?php echo (int) $apply_used; ?></td><td><?php echo $apply_lim < 0 ? esc_html__( 'Unlimited', 'jbportal' ) : (int) $apply_lim; ?></td></tr>
+							<tr><td><?php esc_html_e( 'Services', 'jbportal' ); ?></td><td><?php echo (int) $svc_used; ?></td><td><?php echo $svc_lim < 0 ? esc_html__( 'Unlimited', 'jbportal' ) : (int) $svc_lim; ?></td></tr>
+							<tr><td><?php esc_html_e( 'CV Downloads', 'jbportal' ); ?></td><td><?php echo (int) $cv_used; ?></td><td><?php echo $cv_lim < 0 ? esc_html__( 'Unlimited', 'jbportal' ) : (int) $cv_lim; ?></td></tr>
+						</tbody>
+					</table>
+				<?php else : ?>
+					<p><?php esc_html_e( 'You are on the free plan.', 'jbportal' ); ?></p>
+				<?php endif; ?>
+				<?php if ( jbportal_wc_active() ) : ?>
+					<a class="jb-btn jb-btn-primary" style="margin-top:1rem" href="<?php echo esc_url( home_url( '/membership-plans/' ) ); ?>"><?php esc_html_e( 'Upgrade Plan', 'jbportal' ); ?></a>
+				<?php endif; ?>
+			</div>
 
 		<?php elseif ( 'profile' === $tab ) : ?>
 			<div class="jb-card">

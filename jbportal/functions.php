@@ -127,3 +127,8 @@ require JBPORTAL_DIR . 'inc/account-actions.php';
 require JBPORTAL_DIR . 'inc/analytics.php';
 require JBPORTAL_DIR . 'inc/elementor.php';
 require JBPORTAL_DIR . 'inc/feed.php';
+require JBPORTAL_DIR . 'inc/membership.php';
+require JBPORTAL_DIR . 'inc/services.php';
+require JBPORTAL_DIR . 'inc/wallet.php';
+require JBPORTAL_DIR . 'inc/pdf-cv.php';
+require JBPORTAL_DIR . 'inc/chatgpt.php';

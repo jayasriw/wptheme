@@ -35,6 +35,12 @@ while ( have_posts() ) :
 				<div class="jb-company-actions" style="margin-top:1rem">
 					<?php if ( is_user_logged_in() ) { jbportal_follow_button( $cid ); } ?>
 					<?php jbportal_render_share_buttons(); ?>
+					<?php
+					$cv_uid = (int) get_post_field( 'post_author', $cid );
+					$viewer = get_current_user_id();
+					if ( $cv_uid && ( $viewer === $cv_uid || ( $viewer && ( current_user_can( 'manage_options' ) || ( jbportal_user_is_employer( $viewer ) && jbportal_can_see_contact_info( $viewer ) ) ) ) ) ) : ?>
+						<a class="jb-btn jb-btn-ghost" href="<?php echo esc_url( jbportal_pdf_cv_url( $cv_uid ) ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Download CV (PDF)', 'jbportal' ); ?></a>
+					<?php endif; ?>
 				</div>
 			</div>
 		</div>
@@ -55,6 +61,16 @@ while ( have_posts() ) :
 		<aside class="jb-sidebar">
 			<div class="jb-card">
 				<h3><?php esc_html_e( 'Contact', 'jbportal' ); ?></h3>
+				<?php
+				$viewer_id      = get_current_user_id();
+				$cand_author    = (int) get_post_field( 'post_author', $cid );
+				$can_see_contact = $viewer_id && (
+					$viewer_id === $cand_author
+					|| current_user_can( 'manage_options' )
+					|| ( jbportal_user_is_employer( $viewer_id ) && jbportal_can_see_contact_info( $viewer_id ) )
+				);
+				?>
+				<?php if ( $can_see_contact ) : ?>
 				<ul class="jb-info-list">
 					<?php if ( $email )  : ?><li><strong><?php esc_html_e( 'Email', 'jbportal' ); ?></strong><span><a href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ); ?></a></span></li><?php endif; ?>
 					<?php if ( $phone )  : ?><li><strong><?php esc_html_e( 'Phone', 'jbportal' ); ?></strong><span><?php echo esc_html( $phone ); ?></span></li><?php endif; ?>
@@ -63,6 +79,12 @@ while ( have_posts() ) :
 				</ul>
 				<?php if ( $resume ) : ?>
 					<a class="jb-btn jb-btn-primary" href="<?php echo esc_url( $resume ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Download Resume', 'jbportal' ); ?></a>
+				<?php endif; ?>
+				<?php else : ?>
+					<p class="jb-contact-gate"><?php esc_html_e( 'Upgrade your membership plan to view candidate contact details.', 'jbportal' ); ?></p>
+					<?php if ( jbportal_wc_active() ) : ?>
+						<a class="jb-btn jb-btn-primary jb-btn-sm" href="<?php echo esc_url( home_url( '/membership-plans/' ) ); ?>"><?php esc_html_e( 'View Plans', 'jbportal' ); ?></a>
+					<?php endif; ?>
 				<?php endif; ?>
 			</div>
 

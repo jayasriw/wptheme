@@ -612,6 +612,48 @@ h3 { font-size: 1.25rem; }
 /* ── Home — Remote ─────────────────────────────────────────── */
 .jb-hero-remote { background: linear-gradient(135deg, #ecfdf5 0%, var(--jb-bg-tint) 100%); padding: 5rem 0; }
 
+/* ── Home — Marketplace ────────────────────────────────────── */
+.jb-hero-marketplace { background: linear-gradient(135deg, #f0fdf4 0%, var(--jb-bg-tint) 100%); padding: 6rem 0 5rem; }
+.jb-how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 2.5rem; }
+.jb-how-step { text-align: center; padding: 2rem 1.5rem; background: var(--jb-bg); border: 1px solid var(--jb-border); border-radius: var(--jb-radius); }
+.jb-how-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+.jb-how-step h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+
+/* ── Services Grid ─────────────────────────────────────────── */
+.jb-services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.jb-services-grid-4 { grid-template-columns: repeat(4, 1fr); }
+.jb-service-card { background: var(--jb-bg); border: 1px solid var(--jb-border); border-radius: var(--jb-radius); overflow: hidden; transition: box-shadow .2s, transform .2s; }
+.jb-service-card:hover { box-shadow: var(--jb-shadow-md); transform: translateY(-2px); }
+.jb-service-featured { border-color: var(--jb-primary); }
+.jb-service-thumb img { width: 100%; height: 180px; object-fit: cover; display: block; }
+.jb-service-body { padding: 1rem 1.25rem 1.25rem; }
+.jb-service-title { font-size: 1rem; font-weight: 600; margin: 0.5rem 0 0.25rem; }
+.jb-service-title a { color: var(--jb-text); text-decoration: none; }
+.jb-service-title a:hover { color: var(--jb-primary); }
+.jb-service-seller { font-size: 0.8125rem; color: var(--jb-muted); margin-bottom: 0.75rem; }
+.jb-service-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--jb-border); }
+.jb-service-delivery { font-size: 0.8125rem; color: var(--jb-muted); }
+.jb-service-price { font-size: 1.125rem; font-weight: 700; color: var(--jb-primary); }
+
+/* ── Single service ────────────────────────────────────────── */
+.jb-service-hero img { width: 100%; max-height: 420px; object-fit: cover; border-radius: var(--jb-radius); margin-bottom: 1.5rem; }
+.jb-service-seller-row { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.75rem; font-weight: 500; }
+.jb-service-order-card { text-align: center; }
+.jb-service-price-display { font-size: 2.25rem; font-weight: 800; color: var(--jb-primary); }
+.jb-service-delivery-display { color: var(--jb-muted); margin-top: 0.25rem; font-size: 0.9rem; }
+.jb-btn-full { width: 100%; text-align: center; }
+
+/* ── Wallet ────────────────────────────────────────────────── */
+.jb-wallet-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+.jb-wallet-card { background: var(--jb-bg); border: 1px solid var(--jb-border); border-radius: var(--jb-radius); padding: 1.75rem 2rem; text-align: center; }
+.jb-wallet-card-pending { border-color: #f59e0b; background: #fffbeb; }
+.jb-wallet-label { display: block; font-size: 0.875rem; color: var(--jb-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.jb-wallet-amount { display: block; font-size: 2.5rem; font-weight: 800; color: var(--jb-primary); }
+.jb-wallet-card-pending .jb-wallet-amount { color: #b45309; }
+
+/* ── Membership ────────────────────────────────────────────── */
+.jb-contact-gate { font-size: 0.875rem; color: var(--jb-muted); font-style: italic; margin-bottom: 0.75rem; }
+
 /* ── Responsive: new layouts ───────────────────────────────── */
 @media (max-width: 768px) {
 	.jb-hero-startup-inner { grid-template-columns: 1fr; }
@@ -619,4 +661,12 @@ h3 { font-size: 1.25rem; }
 	.jb-hero-split { grid-template-columns: 1fr; }
 	.jb-hero-split-panel { padding: 3rem 1.5rem; min-height: 260px; }
 	.jb-scroll-row .jb-job-card { flex: 0 0 260px; }
+	.jb-services-grid { grid-template-columns: 1fr 1fr; }
+	.jb-services-grid-4 { grid-template-columns: 1fr 1fr; }
+	.jb-wallet-summary { grid-template-columns: 1fr; }
+	.jb-how-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+	.jb-services-grid,
+	.jb-services-grid-4 { grid-template-columns: 1fr; }
 }

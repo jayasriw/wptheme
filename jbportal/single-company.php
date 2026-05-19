@@ -96,11 +96,24 @@ while ( have_posts() ) :
 			<?php endif; ?>
 			<div class="jb-card">
 				<h3><?php esc_html_e( 'Contact', 'jbportal' ); ?></h3>
+				<?php
+				$comp_viewer     = get_current_user_id();
+				$comp_author     = (int) get_post_field( 'post_author', $cid );
+				$can_see_comp    = $comp_viewer && (
+					$comp_viewer === $comp_author
+					|| current_user_can( 'manage_options' )
+					|| ( jbportal_user_is_employer( $comp_viewer ) && jbportal_can_see_contact_info( $comp_viewer ) )
+					|| jbportal_user_is_candidate( $comp_viewer )
+				);
+				?>
 				<ul class="jb-info-list">
 					<?php if ( $website ) : ?><li><strong><?php esc_html_e( 'Website', 'jbportal' ); ?></strong><span><a href="<?php echo esc_url( $website ); ?>" target="_blank" rel="noopener"><?php echo esc_html( preg_replace( '#^https?://#', '', $website ) ); ?></a></span></li><?php endif; ?>
-					<?php if ( $email ) : ?><li><strong><?php esc_html_e( 'Email', 'jbportal' ); ?></strong><span><a href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ); ?></a></span></li><?php endif; ?>
-					<?php if ( $phone ) : ?><li><strong><?php esc_html_e( 'Phone', 'jbportal' ); ?></strong><span><?php echo esc_html( $phone ); ?></span></li><?php endif; ?>
+					<?php if ( $email && $can_see_comp ) : ?><li><strong><?php esc_html_e( 'Email', 'jbportal' ); ?></strong><span><a href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ); ?></a></span></li><?php endif; ?>
+					<?php if ( $phone && $can_see_comp ) : ?><li><strong><?php esc_html_e( 'Phone', 'jbportal' ); ?></strong><span><?php echo esc_html( $phone ); ?></span></li><?php endif; ?>
 				</ul>
+				<?php if ( ! $can_see_comp && ( $email || $phone ) ) : ?>
+					<p class="jb-contact-gate"><?php esc_html_e( 'Sign in to view contact details.', 'jbportal' ); ?></p>
+				<?php endif; ?>
 			</div>
 		</aside>
 	</div>

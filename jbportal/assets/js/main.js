@@ -170,5 +170,46 @@
 				$msg.text(jbportal.i18n.error).show();
 			});
 		});
+
+		// AI job description generation.
+		$(document).on('click', '#jb-ai-generate', function () {
+			if (!jbportal.aiEnabled) { return; }
+			var $btn    = $(this);
+			var $status = $('#jb-ai-status');
+			var $area   = $('#jb-job-description');
+			var title   = $('[name="job_title"]').val();
+			var company = $('[name="job_company"]').val();
+			var loc     = $('[name="job_location"]').val();
+			var type    = $('[name="job_type"] option:selected').text();
+
+			if (!title) {
+				alert(jbportal.i18n.ai_need_title || 'Please enter a job title first.');
+				return;
+			}
+
+			$btn.prop('disabled', true);
+			$status.text(jbportal.i18n.ai_generating || 'Generating…').show();
+
+			$.post(jbportal.ajaxUrl, {
+				action:       'jbportal_generate_description',
+				nonce:        jbportal.nonce,
+				job_title:    title,
+				job_company:  company,
+				job_location: loc,
+				job_type:     type
+			}).done(function (resp) {
+				if (resp && resp.success && resp.data.description) {
+					$area.val(resp.data.description);
+					$status.text(jbportal.i18n.ai_done || 'Done! Review and edit as needed.').show();
+				} else {
+					var msg = (resp && resp.data && resp.data.message) ? resp.data.message : (jbportal.i18n.error || 'Error.');
+					$status.text(msg).show();
+				}
+			}).fail(function () {
+				$status.text(jbportal.i18n.error || 'Request failed.').show();
+			}).always(function () {
+				$btn.prop('disabled', false);
+			});
+		});
 	});
 })(jQuery);

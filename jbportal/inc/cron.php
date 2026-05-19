@@ -16,6 +16,9 @@ function jbportal_schedule_events() {
 	if ( ! wp_next_scheduled( 'jbportal_daily_job_alerts' ) ) {
 		wp_schedule_event( strtotime( 'tomorrow 8:00' ), 'daily', 'jbportal_daily_job_alerts' );
 	}
+	if ( ! wp_next_scheduled( 'jbportal_meeting_reminders' ) ) {
+		wp_schedule_event( strtotime( 'tomorrow 7:00' ), 'daily', 'jbportal_meeting_reminders' );
+	}
 }
 add_action( 'after_switch_theme', 'jbportal_schedule_events' );
 add_action( 'init', 'jbportal_schedule_events' );
@@ -23,6 +26,7 @@ add_action( 'init', 'jbportal_schedule_events' );
 function jbportal_clear_scheduled_events() {
 	wp_clear_scheduled_hook( 'jbportal_daily_expire_jobs' );
 	wp_clear_scheduled_hook( 'jbportal_daily_job_alerts' );
+	wp_clear_scheduled_hook( 'jbportal_meeting_reminders' );
 }
 add_action( 'switch_theme', 'jbportal_clear_scheduled_events' );
 
