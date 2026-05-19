@@ -89,6 +89,47 @@
 			});
 		});
 
+		// Cookie banner.
+		try {
+			var cookieState = localStorage.getItem('jbportal_cookie');
+			var $notice = $('#jb-cookie-notice');
+			if ($notice.length && !cookieState) {
+				$notice.removeAttr('hidden');
+			}
+			$notice.on('click', '[data-jb-cookie]', function () {
+				localStorage.setItem('jbportal_cookie', $(this).data('jb-cookie'));
+				$notice.attr('hidden', true);
+			});
+		} catch (e) {}
+
+		// Follow toggle.
+		$(document).on('click', '.jb-follow', function () {
+			var $btn = $(this);
+			$.post(jbportal.ajaxUrl, {
+				action:  'jbportal_toggle_follow',
+				nonce:   jbportal.nonce,
+				post_id: $btn.data('post-id')
+			}).done(function (resp) {
+				if (resp && resp.success) {
+					var followed = resp.data.state === 'followed';
+					$btn.toggleClass('is-active', followed);
+					$btn.find('.jb-follow-label').text(followed ? 'Following' : 'Follow');
+				}
+			});
+		});
+
+		// Copy link.
+		$(document).on('click', '.jb-share-copy', function () {
+			var url = $(this).data('url');
+			if (navigator.clipboard) {
+				navigator.clipboard.writeText(url).then(function () {
+					alert('Link copied!');
+				});
+			} else {
+				prompt('Copy link:', url);
+			}
+		});
+
 		// Apply form ux: scroll to anchor + button state.
 		$('.jb-apply-form').on('submit', function () {
 			$(this).find('button[type=submit]').prop('disabled', true).text(jbportal.i18n.applying);

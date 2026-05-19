@@ -507,3 +507,42 @@ h3 { font-size: 1.25rem; }
 /* Theme toggle button */
 .jb-theme-toggle { background: transparent; border: 1px solid var(--jb-border); border-radius: 999px; padding: .4rem .7rem; cursor: pointer; font-size: .8rem; color: var(--jb-text); }
 .jb-theme-toggle:hover { border-color: var(--jb-primary); color: var(--jb-primary); }
+
+/* Share buttons */
+.jb-share { display: inline-flex; gap: .35rem; align-items: center; margin-left: .5rem; }
+.jb-share-label { font-size: .8rem; color: var(--jb-muted); margin-right: .25rem; }
+.jb-share-btn { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--jb-border); background: #fff; color: var(--jb-text); font-weight: 700; cursor: pointer; text-decoration: none; }
+.jb-share-btn:hover { background: var(--jb-primary); color: #fff; border-color: var(--jb-primary); }
+.jb-share-twitter:hover  { background: #000; border-color: #000; }
+.jb-share-facebook:hover { background: #1877f2; border-color: #1877f2; }
+.jb-share-linkedin:hover { background: #0a66c2; border-color: #0a66c2; }
+.jb-share-whatsapp:hover { background: #25d366; border-color: #25d366; }
+
+/* Follow button */
+.jb-follow.is-active { background: var(--jb-primary); color: #fff; border-color: var(--jb-primary); }
+.jb-follow.is-active:hover { background: var(--jb-primary-dark); }
+
+/* Cookie notice */
+.jb-cookie-notice { position: fixed; left: 1rem; right: 1rem; bottom: 1rem; max-width: 480px; margin: 0 auto; background: var(--jb-dark); color: #fff; padding: 1rem 1.25rem; border-radius: var(--jb-radius); box-shadow: var(--jb-shadow-lg); z-index: 200; display: flex; flex-direction: column; gap: .75rem; }
+.jb-cookie-notice p { margin: 0; font-size: .9rem; color: rgba(255,255,255,0.9); }
+.jb-cookie-notice a { color: var(--jb-accent); }
+.jb-cookie-actions { display: flex; gap: .5rem; justify-content: flex-end; }
+.jb-cookie-notice .jb-btn-ghost { color: #fff; border-color: rgba(255,255,255,0.3); }
+
+/* Mega menu — add class "menu-item-mega" to a top-level menu item */
+.jb-menu .menu-item-mega { position: static; }
+.jb-menu .menu-item-mega > .sub-menu { left: 0; right: 0; width: 100%; padding: 1.5rem 2rem; column-count: 3; column-gap: 2rem; max-width: 1200px; margin: 0 auto; }
+.jb-menu .menu-item-mega > .sub-menu li { break-inside: avoid; padding: .25rem 0; }
+
+/* Job video */
+.jb-job-video { margin: 1rem 0 1.5rem; border-radius: var(--jb-radius); overflow: hidden; }
+.jb-job-video iframe { width: 100%; aspect-ratio: 16/9; border: 0; display: block; }
+
+/* Home variants */
+.jb-hero-classic { padding: 4rem 0; }
+.jb-hero-flat { padding: 4rem 0 1rem; }
+.jb-hero-corporate { background: linear-gradient(135deg, var(--jb-dark), #1e293b); color: #fff; padding: 6rem 0 5rem; }
+.jb-hero-corporate .jb-hero-title, .jb-hero-corporate .jb-eyebrow { color: #fff; }
+.jb-hero-corporate .jb-eyebrow { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.9); }
+.jb-hero-corporate .jb-hero-subtitle { color: rgba(255,255,255,0.8); }
+.jb-section-minimal-hero { padding: 5rem 0 2rem; }

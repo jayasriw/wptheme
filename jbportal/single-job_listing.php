@@ -16,6 +16,10 @@ while ( have_posts() ) :
 	$deadline = get_post_meta( $post_id, '_job_deadline', true );
 	$apply_url   = get_post_meta( $post_id, '_job_apply_url', true );
 	$apply_email = get_post_meta( $post_id, '_job_apply_email', true );
+	$apply_phone = get_post_meta( $post_id, '_job_apply_phone', true );
+	$apply_type  = get_post_meta( $post_id, '_job_apply_type', true ) ?: ( $apply_url ? 'external' : 'internal' );
+	$video_url   = get_post_meta( $post_id, '_job_video_url', true );
+	$allow_anon  = (bool) get_post_meta( $post_id, '_job_allow_anon_apply', true );
 	$is_featured = jbportal_is_featured( $post_id );
 	$is_urgent   = (bool) get_post_meta( $post_id, '_job_urgent', true );
 	$is_filled   = (bool) get_post_meta( $post_id, '_job_filled', true );
@@ -59,20 +63,32 @@ while ( have_posts() ) :
 				</div>
 			</div>
 			<div class="jb-job-actions">
-				<?php if ( $apply_url ) : ?>
+				<?php if ( 'external' === $apply_type && $apply_url ) : ?>
 					<a class="jb-btn jb-btn-primary jb-btn-lg" href="<?php echo esc_url( $apply_url ); ?>" target="_blank" rel="nofollow noopener"><?php esc_html_e( 'Apply on Site', 'jbportal' ); ?></a>
+				<?php elseif ( 'email' === $apply_type && $apply_email ) : ?>
+					<a class="jb-btn jb-btn-primary jb-btn-lg" href="mailto:<?php echo esc_attr( $apply_email ); ?>?subject=<?php echo esc_attr( rawurlencode( get_the_title() ) ); ?>"><?php esc_html_e( 'Apply by Email', 'jbportal' ); ?></a>
+				<?php elseif ( 'phone' === $apply_type && $apply_phone ) : ?>
+					<a class="jb-btn jb-btn-primary jb-btn-lg" href="tel:<?php echo esc_attr( $apply_phone ); ?>"><?php esc_html_e( 'Call to Apply', 'jbportal' ); ?></a>
 				<?php else : ?>
 					<a class="jb-btn jb-btn-primary jb-btn-lg" href="#apply"><?php esc_html_e( 'Apply Now', 'jbportal' ); ?></a>
 				<?php endif; ?>
 				<button class="jb-btn jb-btn-ghost jb-bookmark" data-job-id="<?php echo esc_attr( $post_id ); ?>">
 					<span class="jb-heart">♡</span> <?php esc_html_e( 'Save', 'jbportal' ); ?>
 				</button>
+				<?php jbportal_render_share_buttons(); ?>
 			</div>
 		</div>
 	</section>
 
 	<div class="jb-container jb-layout-2col jb-job-page">
 		<article class="jb-content">
+			<?php if ( $video_url ) :
+				$oembed = wp_oembed_get( $video_url );
+				if ( $oembed ) : ?>
+					<div class="jb-job-video"><?php echo $oembed; // phpcs:ignore ?></div>
+				<?php endif;
+			endif; ?>
+
 			<div class="jb-job-description"><?php the_content(); ?></div>
 
 			<?php
@@ -95,7 +111,11 @@ while ( have_posts() ) :
 					<div class="jb-notice jb-notice-error"><?php echo esc_html( $err_msg ); ?></div>
 				<?php endif; ?>
 
-				<?php if ( ! $is_filled ) : ?>
+				<?php if ( ! $is_filled && 'internal' === $apply_type ) :
+					$can_apply = is_user_logged_in() || $allow_anon;
+					if ( ! $can_apply ) : ?>
+						<p><a class="jb-btn jb-btn-primary" href="<?php echo esc_url( wp_login_url( get_permalink() ) ); ?>"><?php esc_html_e( 'Sign in to apply', 'jbportal' ); ?></a></p>
+					<?php else : ?>
 				<form class="jb-form jb-apply-form" method="post" enctype="multipart/form-data">
 					<?php wp_nonce_field( 'jbportal_apply', 'jbportal_apply_nonce' ); ?>
 					<input type="hidden" name="job_id" value="<?php echo esc_attr( $post_id ); ?>">
@@ -109,7 +129,8 @@ while ( have_posts() ) :
 					<label><?php esc_html_e( 'Cover Letter', 'jbportal' ); ?><textarea name="applicant_cover" rows="6" placeholder="<?php esc_attr_e( 'Tell the team why you\'re a great fit…', 'jbportal' ); ?>"></textarea></label>
 					<button type="submit" class="jb-btn jb-btn-primary jb-btn-lg"><?php esc_html_e( 'Submit Application', 'jbportal' ); ?></button>
 				</form>
-				<?php else : ?>
+				<?php endif; // can_apply ?>
+				<?php elseif ( $is_filled ) : ?>
 					<p><?php esc_html_e( 'This position is no longer accepting applications.', 'jbportal' ); ?></p>
 				<?php endif; ?>
 			</div>

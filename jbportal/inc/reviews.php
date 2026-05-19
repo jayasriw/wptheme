@@ -22,6 +22,17 @@ function jbportal_register_review_cpt() {
 		'supports'        => array( 'title', 'editor', 'author' ),
 		'capability_type' => 'post',
 	) );
+	register_post_type( 'candidate_review', array(
+		'labels' => array(
+			'name'          => __( 'Candidate Reviews', 'jbportal' ),
+			'singular_name' => __( 'Candidate Review', 'jbportal' ),
+		),
+		'public'          => false,
+		'show_ui'         => true,
+		'show_in_menu'    => 'edit.php?post_type=candidate',
+		'supports'        => array( 'title', 'editor', 'author' ),
+		'capability_type' => 'post',
+	) );
 }
 add_action( 'init', 'jbportal_register_review_cpt' );
 

@@ -32,6 +32,10 @@ while ( have_posts() ) :
 					<?php if ( $salary ) : ?><span>💰 <?php echo esc_html( $salary ); ?></span><?php endif; ?>
 					<?php if ( $avail ) : ?><span class="jb-badge jb-badge-available"><?php esc_html_e( 'Available', 'jbportal' ); ?></span><?php endif; ?>
 				</div>
+				<div class="jb-company-actions" style="margin-top:1rem">
+					<?php if ( is_user_logged_in() ) { jbportal_follow_button( $cid ); } ?>
+					<?php jbportal_render_share_buttons(); ?>
+				</div>
 			</div>
 		</div>
 	</section>

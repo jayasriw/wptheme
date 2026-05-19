@@ -82,6 +82,19 @@ function jbportal_job_details_cb( $post ) {
 	jbportal_text_field( $post->ID, '_job_experience', __( 'Experience (years)', 'jbportal' ), 'text' );
 	jbportal_text_field( $post->ID, '_job_apply_email', __( 'Apply Email', 'jbportal' ), 'email' );
 	jbportal_text_field( $post->ID, '_job_apply_url', __( 'External Apply URL', 'jbportal' ), 'url' );
+	jbportal_text_field( $post->ID, '_job_apply_phone', __( 'Apply Phone', 'jbportal' ), 'tel' );
+	$apply_type = get_post_meta( $post->ID, '_job_apply_type', true ) ?: 'internal';
+	?>
+	<p><label><strong><?php esc_html_e( 'Application method', 'jbportal' ); ?></strong></label><br>
+		<select name="_job_apply_type" class="widefat">
+			<?php foreach ( array( 'internal' => __( 'Internal form (on-site)', 'jbportal' ), 'external' => __( 'External URL', 'jbportal' ), 'email' => __( 'Email only', 'jbportal' ), 'phone' => __( 'Phone only', 'jbportal' ) ) as $k => $l ) {
+				printf( '<option value="%s" %s>%s</option>', esc_attr( $k ), selected( $apply_type, $k, false ), esc_html( $l ) );
+			} ?>
+		</select>
+	</p>
+	<?php
+	jbportal_text_field( $post->ID, '_job_video_url', __( 'Video URL (YouTube/Vimeo)', 'jbportal' ), 'url' );
+	jbportal_checkbox_field( $post->ID, '_job_allow_anon_apply', __( 'Allow application without login', 'jbportal' ) );
 	jbportal_text_field( $post->ID, '_job_deadline', __( 'Application Deadline', 'jbportal' ), 'date' );
 	jbportal_checkbox_field( $post->ID, '_job_featured', __( 'Featured Job', 'jbportal' ) );
 	jbportal_checkbox_field( $post->ID, '_job_urgent', __( 'Urgent Hiring', 'jbportal' ) );
@@ -137,6 +150,7 @@ function jbportal_save_meta( $post_id ) {
 		'_candidate_title', '_candidate_location', '_candidate_email', '_candidate_phone', '_candidate_experience',
 		'_candidate_expected_salary', '_candidate_resume_url', '_candidate_linkedin', '_candidate_website', '_candidate_available',
 		'_application_status', '_application_name', '_application_email', '_application_phone', '_application_resume_url', '_application_job_id',
+		'_job_apply_phone', '_job_apply_type', '_job_video_url', '_job_allow_anon_apply',
 	);
 
 	foreach ( $keys as $k ) {

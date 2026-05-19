@@ -89,7 +89,24 @@ jbportal/
 | Dark mode (auto / light / dark toggle) | Yes      |
 | RTL stylesheet                         | Yes      |
 | Translation-ready (.pot template)      | Yes      |
-| 404, search, comments, RSS             | Yes      |
+| Multiple homepage layouts (Classic / Grid / Minimal / Corporate + default) | Yes (5)  |
+| Social sharing buttons (X / FB / LinkedIn / WhatsApp / Email / Copy-link) | Yes |
+| Follow companies / Follow candidates    | Yes      |
+| Online meetings / interviews (Zoom/Meet URL + datetime + email invite) | Yes |
+| Job invitations (employer → candidate)  | Yes      |
+| Candidate reviews (employer rates candidate) | Yes  |
+| Multiple apply methods per job (internal / external / email / phone) | Yes |
+| Allow apply without login (per job)     | Yes      |
+| Video job descriptions (oEmbed YouTube/Vimeo) | Yes |
+| Email templates admin page              | Yes      |
+| Auto-expire jobs (cron, deadline-based, age-based) | Yes |
+| GDPR cookie banner (customizable)       | Yes      |
+| Mega menu support (CSS class hook)      | Yes      |
+| MailChimp integration (API key + list)  | Yes      |
+| Account deactivation (self-service)     | Yes      |
+| CSV export (jobs + candidates)          | Yes      |
+| View counter on jobs / companies / candidates | Yes |
+| 404, search, comments, RSS              | Yes      |
 
 ## Setup
 

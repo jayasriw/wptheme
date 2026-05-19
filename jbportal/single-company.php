@@ -42,6 +42,10 @@ while ( have_posts() ) :
 					<?php if ( $founded ) : ?><span>📅 <?php echo esc_html( sprintf( __( 'Founded %s', 'jbportal' ), $founded ) ); ?></span><?php endif; ?>
 					<?php if ( $address ) : ?><span>📍 <?php echo esc_html( $address ); ?></span><?php endif; ?>
 				</div>
+				<div class="jb-company-actions" style="margin:1rem 0">
+					<?php if ( is_user_logged_in() ) { jbportal_follow_button( $cid ); } ?>
+					<?php jbportal_render_share_buttons(); ?>
+				</div>
 				<?php if ( $website || $twitter || $linkedin || $facebook ) : ?>
 					<div class="jb-company-social">
 						<?php if ( $website )  : ?><a href="<?php echo esc_url( $website ); ?>" target="_blank" rel="noopener">🌐</a><?php endif; ?>

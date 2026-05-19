@@ -72,6 +72,11 @@ function jbportal_ajax_newsletter() {
 		$list[] = $email;
 		update_option( 'jbportal_newsletter', $list );
 	}
+	/**
+	 * Fires when a user signs up via the footer newsletter form.
+	 * MailChimp integration listens to this.
+	 */
+	do_action( 'jbportal_newsletter_signup', $email );
 	wp_send_json_success( array( 'message' => __( 'Thanks! We\'ll keep you posted.', 'jbportal' ) ) );
 }
 add_action( 'wp_ajax_jbportal_newsletter', 'jbportal_ajax_newsletter' );
