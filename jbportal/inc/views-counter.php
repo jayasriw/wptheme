@@ -24,6 +24,7 @@ function jbportal_track_views() {
 	}
 	$views = (int) get_post_meta( $post->ID, '_jb_views', true );
 	update_post_meta( $post->ID, '_jb_views', $views + 1 );
+	do_action( 'jbportal_view_tracked', $post->ID );
 }
 add_action( 'wp', 'jbportal_track_views' );
 

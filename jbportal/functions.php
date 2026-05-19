@@ -124,3 +124,5 @@ require JBPORTAL_DIR . 'inc/email-templates.php';
 require JBPORTAL_DIR . 'inc/cookie-notice.php';
 require JBPORTAL_DIR . 'inc/mailchimp.php';
 require JBPORTAL_DIR . 'inc/account-actions.php';
+require JBPORTAL_DIR . 'inc/analytics.php';
+require JBPORTAL_DIR . 'inc/elementor.php';
