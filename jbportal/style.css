@@ -1,0 +1,18 @@
+/*
+Theme Name: jbportal
+Theme URI: https://example.com/jbportal
+Author: jbportal
+Author URI: https://example.com
+Description: jbportal is a modern, full-featured job board WordPress theme. It includes custom post types for job listings, companies and candidates, advanced filtering, front-end job submission, employer/candidate dashboards, pricing plans, featured listings and a clean responsive design.
+Version: 1.0.0
+Requires at least: 5.8
+Tested up to: 6.5
+Requires PHP: 7.4
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: jbportal
+Tags: job-board, jobs, employment, recruitment, custom-post-types, custom-colors, custom-menu, custom-logo, featured-images, threaded-comments, translation-ready, block-styles, wide-blocks, responsive-layout
+*/
+
+/* The visual styles live in assets/css/main.css. This file only exists for
+   the WordPress theme metadata header above. */
