@@ -71,6 +71,11 @@ get_header();
 			if ( $is_emp ) {
 				$tabs['orders'] = __( 'Service Orders', 'jbportal' );
 			}
+			if ( $is_cand || ! $is_emp ) {
+				$tabs['saved-searches'] = __( 'Saved Searches', 'jbportal' );
+			}
+			$notif_unread = function_exists( 'jbportal_get_unread_notifications_count' ) ? jbportal_get_unread_notifications_count( $user->ID ) : 0;
+			$tabs['notifications'] = __( 'Notifications', 'jbportal' ) . ( $notif_unread ? ' (' . (int) $notif_unread . ')' : '' );
 			$tabs['membership'] = __( 'Membership', 'jbportal' );
 			$tabs['messages'] = __( 'Messages', 'jbportal' ) . ( $unread ? ' (' . (int) $unread . ')' : '' );
 			$tabs['profile']  = __( 'Account', 'jbportal' );
@@ -664,6 +669,84 @@ get_header();
 					<a class="jb-btn jb-btn-primary" style="margin-top:1rem" href="<?php echo esc_url( home_url( '/membership-plans/' ) ); ?>"><?php esc_html_e( 'Upgrade Plan', 'jbportal' ); ?></a>
 				<?php endif; ?>
 			</div>
+
+		<?php elseif ( 'notifications' === $tab ) :
+			// Mark all read.
+			if ( function_exists( 'jbportal_mark_notifications_read' ) ) {
+				jbportal_mark_notifications_read( $user->ID );
+			}
+			$notifs = function_exists( 'jbportal_get_notifications' ) ? jbportal_get_notifications( $user->ID, 50 ) : array();
+			?>
+			<?php if ( $notifs ) : ?>
+				<ul class="jb-notif-list" style="list-style:none;padding:0;margin:0">
+					<?php foreach ( $notifs as $n ) :
+						$type  = get_post_meta( $n->ID, '_notif_type', true ) ?: 'info';
+						$link  = get_post_meta( $n->ID, '_notif_link', true );
+						$read  = get_post_meta( $n->ID, '_notif_read', true );
+						?>
+						<li class="jb-notif-item <?php echo $read ? 'is-read' : 'is-unread'; ?>" style="padding:.75rem 1rem;border-bottom:1px solid var(--jb-border);display:flex;gap:.75rem;align-items:flex-start">
+							<span class="jb-notif-icon" style="font-size:1.1rem"><?php echo 'success' === $type ? '✅' : ( 'warning' === $type ? '⚠️' : ( 'error' === $type ? '❌' : 'ℹ️' ) ); ?></span>
+							<div>
+								<?php if ( $link ) : ?>
+									<a href="<?php echo esc_url( $link ); ?>"><?php echo esc_html( $n->post_title ); ?></a>
+								<?php else : ?>
+									<span><?php echo esc_html( $n->post_title ); ?></span>
+								<?php endif; ?>
+								<div style="font-size:.8rem;color:var(--jb-muted)"><?php echo esc_html( human_time_diff( get_the_time( 'U', $n ), current_time( 'timestamp' ) ) . ' ' . __( 'ago', 'jbportal' ) ); ?></div>
+							</div>
+						</li>
+					<?php endforeach; ?>
+				</ul>
+			<?php else : ?>
+				<p><?php esc_html_e( 'No notifications yet.', 'jbportal' ); ?></p>
+			<?php endif; ?>
+
+		<?php elseif ( 'saved-searches' === $tab ) :
+			$saved_searches = get_posts( array(
+				'post_type'      => 'jb_saved_search',
+				'posts_per_page' => -1,
+				'post_status'    => 'private',
+				'author'         => $user->ID,
+			) );
+			$archive_url = get_post_type_archive_link( 'job_listing' );
+			?>
+			<?php if ( $saved_searches ) : ?>
+				<table class="jb-table">
+					<thead><tr>
+						<th><?php esc_html_e( 'Search', 'jbportal' ); ?></th>
+						<th><?php esc_html_e( 'Saved', 'jbportal' ); ?></th>
+						<th></th>
+					</tr></thead>
+					<tbody>
+					<?php foreach ( $saved_searches as $ss ) :
+						$params_raw = get_post_meta( $ss->ID, '_search_params', true );
+						$params     = $params_raw ? json_decode( $params_raw, true ) : array();
+						$search_url = $archive_url;
+						if ( $params ) {
+							$query_params = array_filter( $params );
+							if ( $query_params ) {
+								$search_url = add_query_arg( $query_params, $archive_url );
+							}
+						}
+						?>
+						<tr>
+							<td><a href="<?php echo esc_url( $search_url ); ?>"><?php echo esc_html( $ss->post_title ); ?></a></td>
+							<td><?php echo esc_html( mysql2date( get_option( 'date_format' ), $ss->post_date ) ); ?></td>
+							<td>
+								<button
+									class="jb-btn jb-btn-sm jb-danger jb-delete-saved-search"
+									data-search-id="<?php echo esc_attr( $ss->ID ); ?>"
+									data-nonce="<?php echo esc_attr( wp_create_nonce( 'jbportal_nonce' ) ); ?>"
+								><?php esc_html_e( 'Delete', 'jbportal' ); ?></button>
+							</td>
+						</tr>
+					<?php endforeach; ?>
+					</tbody>
+				</table>
+			<?php else : ?>
+				<p><?php esc_html_e( 'No saved searches yet. Browse jobs and save your filters!', 'jbportal' ); ?></p>
+				<a class="jb-btn jb-btn-primary jb-btn-sm" href="<?php echo esc_url( $archive_url ); ?>"><?php esc_html_e( 'Browse Jobs', 'jbportal' ); ?></a>
+			<?php endif; ?>
 
 		<?php elseif ( 'profile' === $tab ) : ?>
 			<div class="jb-card">

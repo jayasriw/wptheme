@@ -211,5 +211,72 @@
 				$btn.prop('disabled', false);
 			});
 		});
+
+		// Save search button.
+		$(document).on('click', '#jb-save-search', function () {
+			var $btn  = $(this);
+			var $msg  = $('#jb-save-search-msg');
+			var nonce = $btn.data('nonce');
+			var params = new URLSearchParams(window.location.search);
+
+			$btn.prop('disabled', true);
+			$msg.hide();
+
+			$.post(jbportal.ajaxUrl, {
+				action:   'jbportal_save_search',
+				nonce:    nonce,
+				keyword:  params.get('keyword') || '',
+				location: params.get('location') || '',
+				category: params.get('category') || '',
+				type:     params.get('type') || '',
+				remote:   params.get('remote') || ''
+			}).done(function (resp) {
+				if (resp && resp.success) {
+					$msg.text(resp.data.message || 'Saved!').css('color', 'var(--jb-primary)').show();
+					$btn.prop('disabled', true).text('Saved');
+				} else {
+					var errMsg = (resp && resp.data && resp.data.message) ? resp.data.message : 'Error saving search.';
+					$msg.text(errMsg).css('color', 'var(--jb-secondary)').show();
+					$btn.prop('disabled', false);
+				}
+			}).fail(function () {
+				$msg.text('Request failed.').css('color', 'var(--jb-secondary)').show();
+				$btn.prop('disabled', false);
+			});
+		});
+
+		// Dashboard: delete saved search.
+		$(document).on('click', '.jb-delete-saved-search', function (e) {
+			e.preventDefault();
+			var $btn      = $(this);
+			var searchId  = $btn.data('search-id');
+			var nonce     = $btn.data('nonce');
+
+			if (!confirm(jbportal.i18n.confirm_delete || 'Delete this saved search?')) { return; }
+			$btn.prop('disabled', true);
+
+			$.post(jbportal.ajaxUrl, {
+				action:    'jbportal_delete_saved_search',
+				nonce:     nonce,
+				search_id: searchId
+			}).done(function (resp) {
+				if (resp && resp.success) {
+					$btn.closest('tr').fadeOut(300, function () { $(this).remove(); });
+				} else {
+					$btn.prop('disabled', false);
+					alert((resp && resp.data && resp.data.message) ? resp.data.message : 'Error.');
+				}
+			}).fail(function () {
+				$btn.prop('disabled', false);
+			});
+		});
+
+		// Dashboard: mark notifications read when notifications tab is viewed.
+		if (window.location.search.indexOf('tab=notifications') !== -1) {
+			$.post(jbportal.ajaxUrl, {
+				action: 'jbportal_mark_notifications_read',
+				nonce:  jbportal.nonce
+			});
+		}
 	});
 })(jQuery);

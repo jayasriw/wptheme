@@ -27,6 +27,12 @@
 		<div class="jb-topbar-right">
 			<button class="jb-theme-toggle" type="button" title="<?php esc_attr_e( 'Toggle theme', 'jbportal' ); ?>">🌓 <span class="jb-theme-toggle-label">auto</span></button>
 			<?php if ( is_user_logged_in() ) : ?>
+				<?php
+				$notif_count = function_exists( 'jbportal_get_unread_notifications_count' ) ? jbportal_get_unread_notifications_count( get_current_user_id() ) : 0;
+				?>
+				<a href="<?php echo esc_url( add_query_arg( 'tab', 'notifications', home_url( '/dashboard/' ) ) ); ?>" class="jb-notif-bell" aria-label="<?php esc_attr_e( 'Notifications', 'jbportal' ); ?>">
+					🔔<?php if ( $notif_count > 0 ) : ?><span class="jb-notif-count"><?php echo (int) $notif_count; ?></span><?php endif; ?>
+				</a>
 				<a href="<?php echo esc_url( home_url( '/dashboard/' ) ); ?>"><?php esc_html_e( 'Dashboard', 'jbportal' ); ?></a>
 				<a href="<?php echo esc_url( wp_logout_url( home_url( '/' ) ) ); ?>"><?php esc_html_e( 'Log out', 'jbportal' ); ?></a>
 			<?php else : ?>

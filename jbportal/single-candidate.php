@@ -63,6 +63,12 @@ while ( have_posts() ) :
 
 	<div class="jb-container jb-layout-2col">
 		<article class="jb-content">
+			<?php if ( $video_url ) :
+				$oembed = wp_oembed_get( esc_url( $video_url ) );
+				if ( $oembed ) : ?>
+					<div class="jb-candidate-video"><?php echo $oembed; // phpcs:ignore ?></div>
+				<?php endif;
+			endif; ?>
 			<?php the_content(); ?>
 			<?php $skills = get_the_terms( $cid, 'skill' ); if ( $skills && ! is_wp_error( $skills ) ) : ?>
 				<h3><?php esc_html_e( 'Skills', 'jbportal' ); ?></h3>
@@ -79,7 +85,7 @@ while ( have_posts() ) :
 				<?php
 				$viewer_id      = get_current_user_id();
 				$cand_author    = (int) get_post_field( 'post_author', $cid );
-				$can_see_contact = $viewer_id && (
+				$can_see_contact = $visibility_ok && $viewer_id && (
 					$viewer_id === $cand_author
 					|| current_user_can( 'manage_options' )
 					|| ( jbportal_user_is_employer( $viewer_id ) && jbportal_can_see_contact_info( $viewer_id ) )
@@ -95,6 +101,12 @@ while ( have_posts() ) :
 				<?php if ( $resume ) : ?>
 					<a class="jb-btn jb-btn-primary" href="<?php echo esc_url( $resume ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Download Resume', 'jbportal' ); ?></a>
 				<?php endif; ?>
+				<?php elseif ( ! $visibility_ok ) : ?>
+					<?php if ( 'private' === $visibility ) : ?>
+						<p class="jb-contact-gate"><?php esc_html_e( 'This candidate\'s profile is private.', 'jbportal' ); ?></p>
+					<?php else : ?>
+						<p class="jb-contact-gate"><?php esc_html_e( 'This information is visible to employers only.', 'jbportal' ); ?></p>
+					<?php endif; ?>
 				<?php else : ?>
 					<p class="jb-contact-gate"><?php esc_html_e( 'Upgrade your membership plan to view candidate contact details.', 'jbportal' ); ?></p>
 					<?php if ( jbportal_wc_active() ) : ?>

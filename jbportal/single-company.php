@@ -45,6 +45,9 @@ while ( have_posts() ) :
 				<div class="jb-company-actions" style="margin:1rem 0">
 					<?php if ( is_user_logged_in() ) { jbportal_follow_button( $cid ); } ?>
 					<?php jbportal_render_share_buttons(); ?>
+					<?php if ( ! $verified && is_user_logged_in() ) : ?>
+						<a class="jb-btn jb-btn-ghost jb-btn-sm" href="<?php echo esc_url( add_query_arg( array( 'jbportal_claim' => '1', 'company' => $cid ), get_permalink() ) ); ?>"><?php esc_html_e( 'Claim this company', 'jbportal' ); ?></a>
+					<?php endif; ?>
 				</div>
 				<?php if ( $website || $twitter || $linkedin || $facebook ) : ?>
 					<div class="jb-company-social">

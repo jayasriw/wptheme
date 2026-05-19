@@ -115,15 +115,42 @@ while ( have_posts() ) :
 					$can_apply = is_user_logged_in() || $allow_anon;
 					if ( ! $can_apply ) : ?>
 						<p><a class="jb-btn jb-btn-primary" href="<?php echo esc_url( wp_login_url( get_permalink() ) ); ?>"><?php esc_html_e( 'Sign in to apply', 'jbportal' ); ?></a></p>
-					<?php else : ?>
+					<?php else :
+						// Easy Apply: pre-fill from candidate profile.
+						$prefill_name   = '';
+						$prefill_email  = '';
+						$prefill_phone  = '';
+						$prefill_resume = '';
+						$has_prefill    = false;
+						if ( is_user_logged_in() ) {
+							$current_user  = wp_get_current_user();
+							$prefill_name  = $current_user->display_name;
+							$prefill_email = $current_user->user_email;
+							$cand_posts    = get_posts( array(
+								'post_type'   => 'candidate',
+								'author'      => $current_user->ID,
+								'numberposts' => 1,
+								'post_status' => array( 'publish', 'private' ),
+							) );
+							if ( $cand_posts ) {
+								$cand_post_id   = $cand_posts[0]->ID;
+								$prefill_phone  = get_post_meta( $cand_post_id, '_candidate_phone', true );
+								$prefill_resume = get_post_meta( $cand_post_id, '_candidate_resume_url', true );
+							}
+							$has_prefill = true;
+						}
+					?>
+				<?php if ( $has_prefill ) : ?>
+					<p class="jb-prefill-note" style="font-size:.875rem;color:var(--jb-muted);margin-bottom:.75rem"><?php esc_html_e( 'Fields pre-filled from your profile.', 'jbportal' ); ?></p>
+				<?php endif; ?>
 				<form class="jb-form jb-apply-form" method="post" enctype="multipart/form-data">
 					<?php wp_nonce_field( 'jbportal_apply', 'jbportal_apply_nonce' ); ?>
 					<input type="hidden" name="job_id" value="<?php echo esc_attr( $post_id ); ?>">
 					<div class="jb-grid-2">
-						<label><?php esc_html_e( 'Full Name', 'jbportal' ); ?><input type="text" name="applicant_name" required></label>
-						<label><?php esc_html_e( 'Email', 'jbportal' ); ?><input type="email" name="applicant_email" required></label>
-						<label><?php esc_html_e( 'Phone', 'jbportal' ); ?><input type="tel" name="applicant_phone"></label>
-						<label><?php esc_html_e( 'Resume URL', 'jbportal' ); ?><input type="url" name="applicant_resume_url" placeholder="https://"></label>
+						<label><?php esc_html_e( 'Full Name', 'jbportal' ); ?><input type="text" name="applicant_name" required value="<?php echo esc_attr( $prefill_name ); ?>"></label>
+						<label><?php esc_html_e( 'Email', 'jbportal' ); ?><input type="email" name="applicant_email" required value="<?php echo esc_attr( $prefill_email ); ?>"></label>
+						<label><?php esc_html_e( 'Phone', 'jbportal' ); ?><input type="tel" name="applicant_phone" value="<?php echo esc_attr( $prefill_phone ); ?>"></label>
+						<label><?php esc_html_e( 'Resume URL', 'jbportal' ); ?><input type="url" name="applicant_resume_url" placeholder="https://" value="<?php echo esc_attr( $prefill_resume ); ?>"></label>
 					</div>
 					<label><?php esc_html_e( 'Or upload a resume (PDF/DOC)', 'jbportal' ); ?><input type="file" name="applicant_resume" accept=".pdf,.doc,.docx,.odt,.rtf"></label>
 					<label><?php esc_html_e( 'Cover Letter', 'jbportal' ); ?><textarea name="applicant_cover" rows="6" placeholder="<?php esc_attr_e( 'Tell the team why you\'re a great fit…', 'jbportal' ); ?>"></textarea></label>

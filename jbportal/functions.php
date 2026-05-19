@@ -132,3 +132,8 @@ require JBPORTAL_DIR . 'inc/services.php';
 require JBPORTAL_DIR . 'inc/wallet.php';
 require JBPORTAL_DIR . 'inc/pdf-cv.php';
 require JBPORTAL_DIR . 'inc/chatgpt.php';
+require JBPORTAL_DIR . 'inc/company-claim.php';
+require JBPORTAL_DIR . 'inc/notifications.php';
+require JBPORTAL_DIR . 'inc/recaptcha.php';
+require JBPORTAL_DIR . 'inc/saved-searches.php';
+require JBPORTAL_DIR . 'inc/social-oauth.php';

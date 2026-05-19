@@ -42,6 +42,12 @@ get_header(); ?>
 			global $wp_query;
 			$max_pages = $wp_query->max_num_pages;
 			?>
+			<?php if ( is_user_logged_in() ) : ?>
+				<div class="jb-save-search-wrap" style="margin-bottom:1.25rem">
+					<button id="jb-save-search" class="jb-btn jb-btn-ghost jb-btn-sm" data-nonce="<?php echo esc_attr( wp_create_nonce( 'jbportal_nonce' ) ); ?>"><?php esc_html_e( 'Save this search', 'jbportal' ); ?></button>
+					<span id="jb-save-search-msg" style="margin-left:.5rem;font-size:.875rem;display:none"></span>
+				</div>
+			<?php endif; ?>
 			<div class="jb-jobs-list" id="jb-jobs-container">
 				<?php while ( have_posts() ) : the_post(); get_template_part( 'template-parts/content', 'job' ); endwhile; ?>
 			</div>

@@ -37,6 +37,16 @@ function jbportal_handle_application() {
 		exit;
 	}
 
+	// reCAPTCHA v3 verification (if enabled).
+	if ( function_exists( 'jbportal_recaptcha_verify' ) && get_option( 'jbportal_recaptcha_enabled' ) ) {
+		$recaptcha_token = isset( $_POST['g-recaptcha-response'] ) ? sanitize_text_field( wp_unslash( $_POST['g-recaptcha-response'] ) ) : '';
+		if ( ! jbportal_recaptcha_verify( $recaptcha_token ) ) {
+			set_transient( 'jbportal_apply_err_' . $job_id, __( 'reCAPTCHA verification failed. Please try again.', 'jbportal' ), 60 );
+			wp_safe_redirect( get_permalink( $job_id ) . '#apply' );
+			exit;
+		}
+	}
+
 	// Handle uploaded resume if present.
 	if ( ! empty( $_FILES['applicant_resume']['name'] ) ) {
 		require_once ABSPATH . 'wp-admin/includes/file.php';
