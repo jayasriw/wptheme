@@ -119,3 +119,154 @@ function jbportal_admin_export_handler() {
 	exit;
 }
 add_action( 'admin_post_jbportal_export', 'jbportal_admin_export_handler' );
+
+/* ── CSV Import ──────────────────────────────────────────────── */
+
+add_action( 'admin_menu', 'jbportal_admin_import_menu' );
+function jbportal_admin_import_menu() {
+	add_submenu_page(
+		'edit.php?post_type=job_listing',
+		__( 'Import CSV', 'jbportal' ),
+		__( 'Import CSV', 'jbportal' ),
+		'manage_options',
+		'jbportal-import',
+		'jbportal_admin_import_page'
+	);
+}
+
+function jbportal_admin_import_page() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+	$result = get_transient( 'jbportal_import_result_' . get_current_user_id() );
+	if ( $result ) {
+		delete_transient( 'jbportal_import_result_' . get_current_user_id() );
+	}
+	?>
+	<div class="wrap">
+		<h1><?php esc_html_e( 'Import from CSV', 'jbportal' ); ?></h1>
+
+		<?php if ( $result ) : ?>
+			<div class="notice notice-success"><p><?php echo esc_html( $result ); ?></p></div>
+		<?php endif; ?>
+
+		<p><?php esc_html_e( 'Upload a CSV file to bulk-import jobs or candidates. The first row must be a header row.', 'jbportal' ); ?></p>
+
+		<h2><?php esc_html_e( 'Import Jobs', 'jbportal' ); ?></h2>
+		<p class="description"><?php esc_html_e( 'Required columns: Title, Company, Location. Optional: Salary Min, Salary Max, Apply Email, Apply URL, Featured (1/0), Status (publish/draft).', 'jbportal' ); ?></p>
+		<form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+			<input type="hidden" name="action" value="jbportal_import">
+			<input type="hidden" name="import_type" value="jobs">
+			<?php wp_nonce_field( 'jbportal_import' ); ?>
+			<input type="file" name="csv_file" accept=".csv" required>
+			<?php submit_button( __( 'Import Jobs', 'jbportal' ) ); ?>
+		</form>
+
+		<h2><?php esc_html_e( 'Import Candidates', 'jbportal' ); ?></h2>
+		<p class="description"><?php esc_html_e( 'Required columns: Name. Optional: Title, Location, Experience, Email, Resume URL, Available (1/0).', 'jbportal' ); ?></p>
+		<form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+			<input type="hidden" name="action" value="jbportal_import">
+			<input type="hidden" name="import_type" value="candidates">
+			<?php wp_nonce_field( 'jbportal_import' ); ?>
+			<input type="file" name="csv_file" accept=".csv" required>
+			<?php submit_button( __( 'Import Candidates', 'jbportal' ) ); ?>
+		</form>
+	</div>
+	<?php
+}
+
+add_action( 'admin_post_jbportal_import', 'jbportal_admin_import_handler' );
+function jbportal_admin_import_handler() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die();
+	}
+	check_admin_referer( 'jbportal_import' );
+
+	$type = isset( $_POST['import_type'] ) ? sanitize_key( $_POST['import_type'] ) : 'jobs';
+
+	if ( empty( $_FILES['csv_file']['tmp_name'] ) ) {
+		wp_safe_redirect( add_query_arg( 'page', 'jbportal-import', admin_url( 'edit.php?post_type=job_listing' ) ) );
+		exit;
+	}
+
+	$file    = $_FILES['csv_file']['tmp_name']; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+	$handle  = fopen( $file, 'r' ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+	$headers = fgetcsv( $handle );
+
+	if ( ! $headers ) {
+		wp_safe_redirect( add_query_arg( 'page', 'jbportal-import', admin_url( 'edit.php?post_type=job_listing' ) ) );
+		exit;
+	}
+
+	$headers = array_map( 'trim', $headers );
+	$col     = array_flip( array_map( 'strtolower', $headers ) );
+	$count   = 0;
+
+	if ( 'candidates' === $type ) {
+		while ( ( $row = fgetcsv( $handle ) ) !== false ) {
+			$data = array_map( 'trim', $row );
+			$name = $data[ $col['name'] ?? 0 ] ?? '';
+			if ( ! $name ) { continue; }
+			$pid = wp_insert_post( array(
+				'post_type'   => 'candidate',
+				'post_status' => 'publish',
+				'post_title'  => $name,
+			) );
+			if ( $pid && ! is_wp_error( $pid ) ) {
+				$map = array(
+					'title'      => '_candidate_title',
+					'location'   => '_candidate_location',
+					'experience' => '_candidate_experience',
+					'email'      => '_candidate_email',
+					'resume url' => '_candidate_resume_url',
+					'available'  => '_candidate_available',
+				);
+				foreach ( $map as $header_key => $meta_key ) {
+					if ( isset( $col[ $header_key ] ) && isset( $data[ $col[ $header_key ] ] ) ) {
+						update_post_meta( $pid, $meta_key, sanitize_text_field( $data[ $col[ $header_key ] ] ) );
+					}
+				}
+				$count++;
+			}
+		}
+	} else {
+		while ( ( $row = fgetcsv( $handle ) ) !== false ) {
+			$data  = array_map( 'trim', $row );
+			$title = $data[ $col['title'] ?? 0 ] ?? '';
+			if ( ! $title ) { continue; }
+			$status = isset( $col['status'] ) && isset( $data[ $col['status'] ] ) ? sanitize_key( $data[ $col['status'] ] ) : 'publish';
+			$pid = wp_insert_post( array(
+				'post_type'   => 'job_listing',
+				'post_status' => in_array( $status, array( 'publish', 'draft', 'pending' ), true ) ? $status : 'publish',
+				'post_title'  => $title,
+			) );
+			if ( $pid && ! is_wp_error( $pid ) ) {
+				$map = array(
+					'company'     => '_job_company',
+					'location'    => '_job_location',
+					'salary min'  => '_job_salary_min',
+					'salary max'  => '_job_salary_max',
+					'apply email' => '_job_apply_email',
+					'apply url'   => '_job_apply_url',
+					'featured'    => '_job_featured',
+				);
+				foreach ( $map as $header_key => $meta_key ) {
+					if ( isset( $col[ $header_key ] ) && isset( $data[ $col[ $header_key ] ] ) ) {
+						update_post_meta( $pid, $meta_key, sanitize_text_field( $data[ $col[ $header_key ] ] ) );
+					}
+				}
+				$count++;
+			}
+		}
+	}
+
+	fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+
+	set_transient(
+		'jbportal_import_result_' . get_current_user_id(),
+		sprintf( __( 'Import complete. %d records created.', 'jbportal' ), $count ),
+		60
+	);
+	wp_safe_redirect( add_query_arg( 'page', 'jbportal-import', admin_url( 'edit.php?post_type=job_listing' ) ) );
+	exit;
+}

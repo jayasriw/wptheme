@@ -99,6 +99,114 @@ function jbportal_render_stars( $rating, $size = 1 ) {
 	return $out;
 }
 
+/* ── Candidate reviews (employer rates a candidate) ─────────── */
+
+function jbportal_handle_candidate_review_submit() {
+	if ( empty( $_POST['jbportal_cand_review_nonce'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['jbportal_cand_review_nonce'] ) ), 'jbportal_cand_review' ) ) {
+		return;
+	}
+	if ( ! is_user_logged_in() || ! jbportal_user_is_employer( get_current_user_id() ) ) {
+		return;
+	}
+	$candidate_id = (int) ( $_POST['candidate_id'] ?? 0 );
+	$rating       = max( 1, min( 5, (int) ( $_POST['rating'] ?? 0 ) ) );
+	$title        = sanitize_text_field( wp_unslash( $_POST['review_title'] ?? '' ) );
+	$content      = sanitize_textarea_field( wp_unslash( $_POST['review_content'] ?? '' ) );
+	if ( ! $candidate_id || ! $rating || 'candidate' !== get_post_type( $candidate_id ) ) {
+		return;
+	}
+	$rid = wp_insert_post( array(
+		'post_type'    => 'candidate_review',
+		'post_status'  => 'publish',
+		'post_title'   => $title ?: sprintf( __( 'Review of %s', 'jbportal' ), get_the_title( $candidate_id ) ),
+		'post_content' => $content,
+		'post_author'  => get_current_user_id(),
+	) );
+	if ( $rid && ! is_wp_error( $rid ) ) {
+		update_post_meta( $rid, '_review_candidate_id', $candidate_id );
+		update_post_meta( $rid, '_review_rating', $rating );
+		set_transient( 'jbportal_cand_review_ok_' . $candidate_id, __( 'Thanks for your review!', 'jbportal' ), 60 );
+	}
+	wp_safe_redirect( get_permalink( $candidate_id ) . '#candidate-reviews' );
+	exit;
+}
+add_action( 'template_redirect', 'jbportal_handle_candidate_review_submit' );
+
+function jbportal_get_candidate_reviews( $candidate_id ) {
+	return get_posts( array(
+		'post_type'      => 'candidate_review',
+		'posts_per_page' => -1,
+		'meta_key'       => '_review_candidate_id',
+		'meta_value'     => $candidate_id,
+	) );
+}
+
+function jbportal_get_candidate_avg_rating( $candidate_id ) {
+	$reviews = jbportal_get_candidate_reviews( $candidate_id );
+	if ( ! $reviews ) { return 0; }
+	$total = 0;
+	foreach ( $reviews as $r ) { $total += (int) get_post_meta( $r->ID, '_review_rating', true ); }
+	return round( $total / count( $reviews ), 1 );
+}
+
+function jbportal_render_candidate_reviews( $candidate_id ) {
+	$reviews = jbportal_get_candidate_reviews( $candidate_id );
+	$avg     = jbportal_get_candidate_avg_rating( $candidate_id );
+	$ok      = get_transient( 'jbportal_cand_review_ok_' . $candidate_id );
+	if ( $ok ) { delete_transient( 'jbportal_cand_review_ok_' . $candidate_id ); }
+	?>
+	<section id="candidate-reviews" class="jb-reviews">
+		<header class="jb-reviews-head">
+			<h2><?php printf( esc_html__( 'Reviews (%d)', 'jbportal' ), count( $reviews ) ); ?></h2>
+			<?php if ( $avg ) : ?>
+				<div class="jb-reviews-avg">
+					<?php echo jbportal_render_stars( $avg, 1.1 ); // phpcs:ignore ?>
+					<strong><?php echo esc_html( number_format_i18n( $avg, 1 ) ); ?></strong>
+				</div>
+			<?php endif; ?>
+		</header>
+		<?php if ( $ok ) : ?><div class="jb-notice jb-notice-success"><?php echo esc_html( $ok ); ?></div><?php endif; ?>
+		<?php if ( $reviews ) : ?>
+			<ul class="jb-review-list">
+				<?php foreach ( $reviews as $r ) :
+					$rating = (int) get_post_meta( $r->ID, '_review_rating', true );
+					$author = get_userdata( $r->post_author );
+					?>
+					<li class="jb-review">
+						<header>
+							<strong><?php echo esc_html( $r->post_title ); ?></strong>
+							<?php echo jbportal_render_stars( $rating ); // phpcs:ignore ?>
+						</header>
+						<p><?php echo esc_html( $r->post_content ); ?></p>
+						<footer><?php echo esc_html( $author ? $author->display_name : __( 'Anonymous', 'jbportal' ) ); ?> · <?php echo esc_html( mysql2date( get_option( 'date_format' ), $r->post_date ) ); ?></footer>
+					</li>
+				<?php endforeach; ?>
+			</ul>
+		<?php else : ?>
+			<p><?php esc_html_e( 'No reviews yet.', 'jbportal' ); ?></p>
+		<?php endif; ?>
+		<?php if ( is_user_logged_in() && jbportal_user_is_employer( get_current_user_id() ) ) : ?>
+			<form class="jb-form jb-review-form" method="post">
+				<?php wp_nonce_field( 'jbportal_cand_review', 'jbportal_cand_review_nonce' ); ?>
+				<input type="hidden" name="candidate_id" value="<?php echo esc_attr( $candidate_id ); ?>">
+				<h3><?php esc_html_e( 'Rate this candidate', 'jbportal' ); ?></h3>
+				<div class="jb-star-picker" role="radiogroup" aria-label="<?php esc_attr_e( 'Rating', 'jbportal' ); ?>">
+					<?php for ( $i = 5; $i >= 1; $i-- ) : ?>
+						<input type="radio" id="jb-cr-<?php echo $i; ?>" name="rating" value="<?php echo $i; ?>" required>
+						<label for="jb-cr-<?php echo $i; ?>" aria-label="<?php echo esc_attr( sprintf( __( '%d stars', 'jbportal' ), $i ) ); ?>">★</label>
+					<?php endfor; ?>
+				</div>
+				<label><?php esc_html_e( 'Title', 'jbportal' ); ?><input type="text" name="review_title" required></label>
+				<label><?php esc_html_e( 'Your experience', 'jbportal' ); ?><textarea name="review_content" rows="4" required></textarea></label>
+				<button type="submit" class="jb-btn jb-btn-primary"><?php esc_html_e( 'Submit Review', 'jbportal' ); ?></button>
+			</form>
+		<?php endif; ?>
+	</section>
+	<?php
+}
+
+/* ── Company reviews ─────────────────────────────────────────── */
+
 function jbportal_render_company_reviews( $company_id ) {
 	$reviews = jbportal_get_company_reviews( $company_id );
 	$avg     = jbportal_get_company_avg_rating( $company_id );

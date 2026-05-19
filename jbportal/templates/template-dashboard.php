@@ -50,12 +50,16 @@ get_header();
 			if ( $is_emp ) {
 				$tabs['jobs']             = __( 'My Jobs', 'jbportal' );
 				$tabs['received']         = __( 'Received Applications', 'jbportal' );
+				$tabs['meetings']         = __( 'Meetings', 'jbportal' );
+				$tabs['invitations']      = __( 'Invitations', 'jbportal' );
 				$tabs['employer-profile'] = __( 'Company Profile', 'jbportal' );
 			}
 			if ( $is_cand || ! $is_emp ) {
 				$tabs['applications']      = __( 'My Applications', 'jbportal' );
 				$tabs['bookmarks']         = __( 'Bookmarks', 'jbportal' );
 				$tabs['alerts']            = __( 'Job Alerts', 'jbportal' );
+				$tabs['meetings']          = __( 'Interviews', 'jbportal' );
+				$tabs['invitations']       = __( 'Invitations', 'jbportal' );
 				$tabs['candidate-profile'] = __( 'Candidate Profile', 'jbportal' );
 			}
 			$tabs['messages'] = __( 'Messages', 'jbportal' ) . ( $unread ? ' (' . (int) $unread . ')' : '' );
@@ -282,6 +286,153 @@ get_header();
 				</ul>
 			<?php else : ?>
 				<p><?php esc_html_e( 'No messages yet.', 'jbportal' ); ?></p>
+			<?php endif; ?>
+
+		<?php elseif ( 'meetings' === $tab ) :
+			$meetings     = jbportal_get_user_meetings( $user->ID );
+			$meeting_ok   = get_transient( 'jbportal_meeting_ok_' . $user->ID );
+			if ( $meeting_ok ) { delete_transient( 'jbportal_meeting_ok_' . $user->ID ); }
+			?>
+			<?php if ( $meeting_ok ) : ?><div class="jb-notice jb-notice-success"><?php echo esc_html( $meeting_ok ); ?></div><?php endif; ?>
+
+			<?php if ( $is_emp ) : ?>
+				<div class="jb-card" style="margin-bottom:2rem">
+					<h3><?php esc_html_e( 'Schedule a meeting', 'jbportal' ); ?></h3>
+					<form class="jb-form" method="post">
+						<?php wp_nonce_field( 'jbportal_create_meeting', 'jbportal_meeting_nonce' ); ?>
+						<label><?php esc_html_e( 'Candidate (user ID)', 'jbportal' ); ?><input type="number" name="meeting_with" required min="1"></label>
+						<label><?php esc_html_e( 'Subject', 'jbportal' ); ?><input type="text" name="meeting_subject" required></label>
+						<label><?php esc_html_e( 'Date &amp; Time', 'jbportal' ); ?><input type="datetime-local" name="meeting_when" required></label>
+						<label><?php esc_html_e( 'Meeting link (Zoom / Meet)', 'jbportal' ); ?><input type="url" name="meeting_url" placeholder="https://"></label>
+						<label><?php esc_html_e( 'Notes', 'jbportal' ); ?><textarea name="meeting_notes" rows="3"></textarea></label>
+						<button class="jb-btn jb-btn-primary" type="submit"><?php esc_html_e( 'Schedule &amp; Send invite', 'jbportal' ); ?></button>
+					</form>
+				</div>
+			<?php endif; ?>
+
+			<?php if ( $meetings ) : ?>
+				<table class="jb-table">
+					<thead><tr>
+						<th><?php esc_html_e( 'Subject', 'jbportal' ); ?></th>
+						<th><?php esc_html_e( $is_emp ? 'With' : 'Organiser', 'jbportal' ); ?></th>
+						<th><?php esc_html_e( 'When', 'jbportal' ); ?></th>
+						<th><?php esc_html_e( 'Link', 'jbportal' ); ?></th>
+					</tr></thead>
+					<tbody>
+					<?php foreach ( $meetings as $m ) :
+						$organizer  = (int) get_post_meta( $m->ID, '_meeting_organizer', true );
+						$with       = (int) get_post_meta( $m->ID, '_meeting_with', true );
+						$peer_id    = $organizer === $user->ID ? $with : $organizer;
+						$peer       = get_userdata( $peer_id );
+						$when       = get_post_meta( $m->ID, '_meeting_when', true );
+						$url        = get_post_meta( $m->ID, '_meeting_url', true );
+						?>
+						<tr>
+							<td><?php echo esc_html( $m->post_title ); ?></td>
+							<td><?php echo esc_html( $peer ? $peer->display_name : '—' ); ?></td>
+							<td><?php echo esc_html( $when ? date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $when ) ) : '—' ); ?></td>
+							<td><?php echo $url ? '<a href="' . esc_url( $url ) . '" target="_blank" rel="noopener">' . esc_html__( 'Join', 'jbportal' ) . '</a>' : '—'; ?></td>
+						</tr>
+					<?php endforeach; ?>
+					</tbody>
+				</table>
+			<?php else : ?>
+				<p><?php esc_html_e( 'No meetings scheduled yet.', 'jbportal' ); ?></p>
+			<?php endif; ?>
+
+		<?php elseif ( 'invitations' === $tab ) :
+			$invite_ok = get_transient( 'jbportal_invite_ok_' . $user->ID );
+			if ( $invite_ok ) { delete_transient( 'jbportal_invite_ok_' . $user->ID ); }
+			?>
+			<?php if ( $invite_ok ) : ?><div class="jb-notice jb-notice-success"><?php echo esc_html( $invite_ok ); ?></div><?php endif; ?>
+
+			<?php if ( $is_emp ) :
+				$sent_invitations = get_posts( array(
+					'post_type'      => 'jb_invitation',
+					'posts_per_page' => -1,
+					'post_status'    => 'private',
+					'author'         => $user->ID,
+				) );
+				?>
+				<div class="jb-card" style="margin-bottom:2rem">
+					<h3><?php esc_html_e( 'Invite a candidate', 'jbportal' ); ?></h3>
+					<form class="jb-form" method="post">
+						<?php wp_nonce_field( 'jbportal_invite', 'jbportal_invite_nonce' ); ?>
+						<label><?php esc_html_e( 'Candidate post ID', 'jbportal' ); ?><input type="number" name="candidate_post_id" required min="1"></label>
+						<label><?php esc_html_e( 'Job', 'jbportal' ); ?>
+							<select name="invite_job_id" required>
+								<option value=""><?php esc_html_e( '— select a job —', 'jbportal' ); ?></option>
+								<?php foreach ( $my_jobs as $j ) : ?>
+									<option value="<?php echo esc_attr( $j->ID ); ?>"><?php echo esc_html( $j->post_title ); ?></option>
+								<?php endforeach; ?>
+							</select>
+						</label>
+						<label><?php esc_html_e( 'Message', 'jbportal' ); ?><textarea name="invite_message" rows="4"></textarea></label>
+						<button class="jb-btn jb-btn-primary" type="submit"><?php esc_html_e( 'Send Invitation', 'jbportal' ); ?></button>
+					</form>
+				</div>
+				<?php if ( $sent_invitations ) : ?>
+					<h3><?php esc_html_e( 'Sent invitations', 'jbportal' ); ?></h3>
+					<table class="jb-table">
+						<thead><tr>
+							<th><?php esc_html_e( 'Job', 'jbportal' ); ?></th>
+							<th><?php esc_html_e( 'Candidate', 'jbportal' ); ?></th>
+							<th><?php esc_html_e( 'Status', 'jbportal' ); ?></th>
+							<th><?php esc_html_e( 'Sent', 'jbportal' ); ?></th>
+						</tr></thead>
+						<tbody>
+						<?php foreach ( $sent_invitations as $inv ) :
+							$cand_post = (int) get_post_meta( $inv->ID, '_invite_candidate_post', true );
+							$job_inv   = (int) get_post_meta( $inv->ID, '_invite_job_id', true );
+							$inv_stat  = get_post_meta( $inv->ID, '_invite_status', true ) ?: 'sent';
+							?>
+							<tr>
+								<td><?php echo esc_html( get_the_title( $job_inv ) ); ?></td>
+								<td><?php echo $cand_post ? '<a href="' . esc_url( get_permalink( $cand_post ) ) . '">' . esc_html( get_the_title( $cand_post ) ) . '</a>' : '—'; ?></td>
+								<td><span class="jb-badge"><?php echo esc_html( $inv_stat ); ?></span></td>
+								<td><?php echo esc_html( mysql2date( get_option( 'date_format' ), $inv->post_date ) ); ?></td>
+							</tr>
+						<?php endforeach; ?>
+						</tbody>
+					</table>
+				<?php endif; ?>
+			<?php else :
+				$received_invitations = jbportal_get_user_invitations( $user->ID );
+				?>
+				<?php if ( $received_invitations ) : ?>
+					<table class="jb-table">
+						<thead><tr>
+							<th><?php esc_html_e( 'Job', 'jbportal' ); ?></th>
+							<th><?php esc_html_e( 'From', 'jbportal' ); ?></th>
+							<th><?php esc_html_e( 'Message', 'jbportal' ); ?></th>
+							<th><?php esc_html_e( 'Status', 'jbportal' ); ?></th>
+							<th><?php esc_html_e( 'Received', 'jbportal' ); ?></th>
+							<th></th>
+						</tr></thead>
+						<tbody>
+						<?php foreach ( $received_invitations as $inv ) :
+							$job_inv   = (int) get_post_meta( $inv->ID, '_invite_job_id', true );
+							$from_user = get_userdata( $inv->post_author );
+							$inv_stat  = get_post_meta( $inv->ID, '_invite_status', true ) ?: 'sent';
+							?>
+							<tr>
+								<td><?php echo $job_inv ? '<a href="' . esc_url( get_permalink( $job_inv ) ) . '">' . esc_html( get_the_title( $job_inv ) ) . '</a>' : '—'; ?></td>
+								<td><?php echo esc_html( $from_user ? $from_user->display_name : '—' ); ?></td>
+								<td><?php echo esc_html( $inv->post_content ); ?></td>
+								<td><span class="jb-badge"><?php echo esc_html( $inv_stat ); ?></span></td>
+								<td><?php echo esc_html( mysql2date( get_option( 'date_format' ), $inv->post_date ) ); ?></td>
+								<td>
+									<?php if ( 'sent' === $inv_stat && $job_inv ) : ?>
+										<a class="jb-btn jb-btn-primary jb-btn-sm" href="<?php echo esc_url( get_permalink( $job_inv ) ); ?>"><?php esc_html_e( 'Apply', 'jbportal' ); ?></a>
+									<?php endif; ?>
+								</td>
+							</tr>
+						<?php endforeach; ?>
+						</tbody>
+					</table>
+				<?php else : ?>
+					<p><?php esc_html_e( 'No invitations received yet.', 'jbportal' ); ?></p>
+				<?php endif; ?>
 			<?php endif; ?>
 
 		<?php elseif ( 'employer-profile' === $tab ) : ?>

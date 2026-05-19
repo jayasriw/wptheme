@@ -80,5 +80,10 @@ while ( have_posts() ) :
 			<?php endif; ?>
 		</aside>
 	</div>
+
+	<div class="jb-container" style="margin-top:2rem">
+		<?php jbportal_render_candidate_reviews( $cid ); ?>
+	</div>
+
 <?php endwhile;
 get_footer();
