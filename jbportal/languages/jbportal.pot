@@ -3,15 +3,1829 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: jbportal 1.0.0\n"
-"Report-Msgid-Bugs-To: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"Language: \n"
+"Report-Msgid-Bugs-To: https://github.com/jayasriw/wptheme/issues\n"
+"POT-Creation-Date: 2024-01-01 00:00:00+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Domain: jbportal\n"
+"X-Generator: jbportal theme build script\n"
 
-# To generate a fresh template, run:
-#   wp i18n make-pot . languages/jbportal.pot
-# from the jbportal theme directory (WP-CLI required).
+msgid "%d open jobs →"
+msgstr ""
+
+msgid "%d open positions found"
+msgstr ""
+
+msgid "%d stars"
+msgstr ""
+
+msgid "%s out of 5 stars"
+msgstr ""
+
+msgid "%s yrs"
+msgstr ""
+
+msgid "%s yrs experience"
+msgstr ""
+
+msgid "+ Post a Job"
+msgstr ""
+
+msgid "/ month"
+msgstr ""
+
+msgid "10,000+ live opportunities"
+msgstr ""
+
+msgid "A complete profile gets 4x more views."
+msgstr ""
+
+msgid "A curated job board for people who care about craft."
+msgstr ""
+
+msgid "A title and description are required."
+msgstr ""
+
+msgid "API Key"
+msgstr ""
+
+msgid "About"
+msgstr ""
+
+msgid "About the company"
+msgstr ""
+
+msgid "About you"
+msgstr ""
+
+msgid "Accept"
+msgstr ""
+
+msgid "Access our pool of vetted freelance professionals."
+msgstr ""
+
+msgid "Account"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Add Candidate"
+msgstr ""
+
+msgid "Add Company"
+msgstr ""
+
+msgid "Add Job"
+msgstr ""
+
+msgid "Add New Company"
+msgstr ""
+
+msgid "Add New Job"
+msgstr ""
+
+msgid "Address"
+msgstr ""
+
+msgid "All Categories"
+msgstr ""
+
+msgid "All categories"
+msgstr ""
+
+msgid "All companies →"
+msgstr ""
+
+msgid "All creative roles"
+msgstr ""
+
+msgid "All jobs loaded."
+msgstr ""
+
+msgid "All jobs →"
+msgstr ""
+
+msgid "All posts →"
+msgstr ""
+
+msgid "All remote →"
+msgstr ""
+
+msgid "Allow application without login"
+msgstr ""
+
+msgid "Analytics"
+msgstr ""
+
+msgid "Anonymous"
+msgstr ""
+
+msgid "Any"
+msgstr ""
+
+msgid "Any job"
+msgstr ""
+
+msgid "Any skill"
+msgstr ""
+
+msgid "Applicant"
+msgstr ""
+
+msgid "Applicant Name"
+msgstr ""
+
+msgid "Application"
+msgstr ""
+
+msgid "Application Deadline"
+msgstr ""
+
+msgid "Application Details"
+msgstr ""
+
+msgid "Application Pipeline"
+msgstr ""
+
+msgid "Application Status Changed"
+msgstr ""
+
+msgid "Application method"
+msgstr ""
+
+msgid "Application sent!"
+msgstr ""
+
+msgid "Applications"
+msgstr ""
+
+msgid "Applications Received"
+msgstr ""
+
+msgid "Applications Sent"
+msgstr ""
+
+msgid "Apply"
+msgstr ""
+
+msgid "Apply Email"
+msgstr ""
+
+msgid "Apply Now"
+msgstr ""
+
+msgid "Apply Phone"
+msgstr ""
+
+msgid "Apply by Email"
+msgstr ""
+
+msgid "Apply for this job"
+msgstr ""
+
+msgid "Apply on Site"
+msgstr ""
+
+msgid "Audience / List ID"
+msgstr ""
+
+msgid "Available"
+msgstr ""
+
+msgid "Available For Hire"
+msgstr ""
+
+msgid "Available for hire"
+msgstr ""
+
+msgid "Available only"
+msgstr ""
+
+msgid "Average employer rating"
+msgstr ""
+
+msgid "Back to home"
+msgstr ""
+
+msgid "Banner text"
+msgstr ""
+
+msgid "Bio"
+msgstr ""
+
+msgid "Body"
+msgstr ""
+
+msgid "Bookmarks"
+msgstr ""
+
+msgid "Browse Jobs"
+msgstr ""
+
+msgid "Browse by category"
+msgstr ""
+
+msgid "Browse by type"
+msgstr ""
+
+msgid "Browse categories"
+msgstr ""
+
+msgid "Browse thousands of open positions updated daily."
+msgstr ""
+
+msgid "Build your independent career."
+msgstr ""
+
+msgid "Call to Apply"
+msgstr ""
+
+msgid "Call-to-action"
+msgstr ""
+
+msgid "Candidate"
+msgstr ""
+
+msgid "Candidate (user ID)"
+msgstr ""
+
+msgid "Candidate Details"
+msgstr ""
+
+msgid "Candidate Profile"
+msgstr ""
+
+msgid "Candidate Review"
+msgstr ""
+
+msgid "Candidate Reviews"
+msgstr ""
+
+msgid "Candidate post ID"
+msgstr ""
+
+msgid "Candidates"
+msgstr ""
+
+msgid "Categories"
+msgstr ""
+
+msgid "Category"
+msgstr ""
+
+msgid "Category slug"
+msgstr ""
+
+msgid "City or country"
+msgstr ""
+
+msgid "City, country"
+msgstr ""
+
+msgid "City, country or remote"
+msgstr ""
+
+msgid "City, state or remote"
+msgstr ""
+
+msgid "Clear filters"
+msgstr ""
+
+msgid "Colors"
+msgstr ""
+
+msgid "Columns"
+msgstr ""
+
+msgid "Companies"
+msgstr ""
+
+msgid "Companies Grid"
+msgstr ""
+
+msgid "Companies hiring on jbportal"
+msgstr ""
+
+msgid "Companies you\\"
+msgstr ""
+
+msgid "Company"
+msgstr ""
+
+msgid "Company & location"
+msgstr ""
+
+msgid "Company Details"
+msgstr ""
+
+msgid "Company Name"
+msgstr ""
+
+msgid "Company Profile"
+msgstr ""
+
+msgid "Company Size"
+msgstr ""
+
+msgid "Company Views — last 30 days"
+msgstr ""
+
+msgid "Company name"
+msgstr ""
+
+msgid "Company profile saved."
+msgstr ""
+
+msgid "Company size"
+msgstr ""
+
+msgid "Compensation"
+msgstr ""
+
+msgid "Contact"
+msgstr ""
+
+msgid "Contact Email"
+msgstr ""
+
+msgid "Contact Sales"
+msgstr ""
+
+msgid "Contact details"
+msgstr ""
+
+msgid "Contract &amp; Freelance roles"
+msgstr ""
+
+msgid "Cookie Notice"
+msgstr ""
+
+msgid "Copy link"
+msgstr ""
+
+msgid "Could not save your job. Please try again."
+msgstr ""
+
+msgid "Could not submit your application. Please try again."
+msgstr ""
+
+msgid "Cover Letter"
+msgstr ""
+
+msgid "Create Alert"
+msgstr ""
+
+msgid "Create a new job alert"
+msgstr ""
+
+msgid "Create account"
+msgstr ""
+
+msgid "Creative careers worth chasing."
+msgstr ""
+
+msgid "Currency Symbol"
+msgstr ""
+
+msgid "Dashboard"
+msgstr ""
+
+msgid "Dashboard Menu"
+msgstr ""
+
+msgid "Date &amp; Time"
+msgstr ""
+
+msgid "Deadline"
+msgstr ""
+
+msgid "Decline"
+msgstr ""
+
+msgid "Default sidebar shown on blog and pages."
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Demo data installed."
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Design, marketing, and creative roles at the world\\"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Discover great places to work."
+msgstr ""
+
+msgid "Discover thousands of open positions across every industry and city."
+msgstr ""
+
+msgid "Display"
+msgstr ""
+
+msgid "Download Candidates CSV"
+msgstr ""
+
+msgid "Download Jobs CSV"
+msgstr ""
+
+msgid "Download Resume"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Edit Company"
+msgstr ""
+
+msgid "Edit Job"
+msgstr ""
+
+msgid "Edit candidate profile"
+msgstr ""
+
+msgid "Edit company profile"
+msgstr ""
+
+msgid "Edit profile"
+msgstr ""
+
+msgid "Edit your candidate profile →"
+msgstr ""
+
+msgid "Edit your company profile →"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Email Templates"
+msgstr ""
+
+msgid "Email me a sign-in link"
+msgstr ""
+
+msgid "Email only"
+msgstr ""
+
+msgid "Email templates saved."
+msgstr ""
+
+msgid "Employer"
+msgstr ""
+
+msgid "Enable cookie banner"
+msgstr ""
+
+msgid "Enterprise"
+msgstr ""
+
+msgid "Expected Salary"
+msgstr ""
+
+msgid "Expected salary"
+msgstr ""
+
+msgid "Experience"
+msgstr ""
+
+msgid "Experience (years)"
+msgstr ""
+
+msgid "Explore categories"
+msgstr ""
+
+msgid "Explore companies and find your next great workplace."
+msgstr ""
+
+msgid "Explore opportunities across the fields you care about."
+msgstr ""
+
+msgid "Export CSV"
+msgstr ""
+
+msgid "Export Jobs"
+msgstr ""
+
+msgid "Export Jobs CSV"
+msgstr ""
+
+msgid "External Apply URL"
+msgstr ""
+
+msgid "External URL"
+msgstr ""
+
+msgid "Facebook"
+msgstr ""
+
+msgid "Featured"
+msgstr ""
+
+msgid "Featured Candidates"
+msgstr ""
+
+msgid "Featured Companies"
+msgstr ""
+
+msgid "Featured Job"
+msgstr ""
+
+msgid "Featured Opportunities"
+msgstr ""
+
+msgid "Featured companies"
+msgstr ""
+
+msgid "Featured jobs"
+msgstr ""
+
+msgid "Featured jobs grid"
+msgstr ""
+
+msgid "Featured only"
+msgstr ""
+
+msgid "Featured openings"
+msgstr ""
+
+msgid "Filter Jobs"
+msgstr ""
+
+msgid "Find Jobs"
+msgstr ""
+
+msgid "Find talented people ready to join your team."
+msgstr ""
+
+msgid "Find the job that fits your life."
+msgstr ""
+
+msgid "Find your next role"
+msgstr ""
+
+msgid "Follow"
+msgstr ""
+
+msgid "Following"
+msgstr ""
+
+msgid "Footer Column %d"
+msgstr ""
+
+msgid "Footer Copyright"
+msgstr ""
+
+msgid "Footer Menu"
+msgstr ""
+
+msgid "For Candidates"
+msgstr ""
+
+msgid "For Employers"
+msgstr ""
+
+msgid "Forbidden"
+msgstr ""
+
+msgid "Founded"
+msgstr ""
+
+msgid "Founded %s"
+msgstr ""
+
+msgid "Founded Year"
+msgstr ""
+
+msgid "Freelance gigs and contract roles with top companies."
+msgstr ""
+
+msgid "From"
+msgstr ""
+
+msgid "From the blog"
+msgstr ""
+
+msgid "Full Name"
+msgstr ""
+
+msgid "Full name"
+msgstr ""
+
+msgid "Get Started"
+msgstr ""
+
+msgid "Get hand-picked jobs in your inbox every week."
+msgstr ""
+
+msgid "Get in touch"
+msgstr ""
+
+msgid "Get job alerts"
+msgstr ""
+
+msgid "Get the weekly digest"
+msgstr ""
+
+msgid "Grow your team with creative talent."
+msgstr ""
+
+msgid "Growth"
+msgstr ""
+
+msgid "Hand-picked openings from top companies across the world."
+msgstr ""
+
+msgid "Heading"
+msgstr ""
+
+msgid "Headline / Title"
+msgstr ""
+
+msgid "Headline / role"
+msgstr ""
+
+msgid "Hero with job search"
+msgstr ""
+
+msgid "Highlighted plan ID"
+msgstr ""
+
+msgid "Hire Talent"
+msgstr ""
+
+msgid "Hire a distributed team"
+msgstr ""
+
+msgid "Hire faster. Hire better."
+msgstr ""
+
+msgid "Hire great people"
+msgstr ""
+
+msgid "Hired"
+msgstr ""
+
+msgid "Hiring now"
+msgstr ""
+
+msgid "Hiring? Reach the candidates you want."
+msgstr ""
+
+msgid "Home"
+msgstr ""
+
+msgid "Homepage Hero"
+msgstr ""
+
+msgid "How many job listings does this package allow? Leave 0 for upgrade-only products (e.g. \"feature a job\")."
+msgstr ""
+
+msgid "How to apply"
+msgstr ""
+
+msgid "I want to hire"
+msgstr ""
+
+msgid "I\\"
+msgstr ""
+
+msgid "Import CSV"
+msgstr ""
+
+msgid "Import Candidates"
+msgstr ""
+
+msgid "Import Jobs"
+msgstr ""
+
+msgid "Import complete. %d records created."
+msgstr ""
+
+msgid "Import from CSV"
+msgstr ""
+
+msgid "Industries"
+msgstr ""
+
+msgid "Industry"
+msgstr ""
+
+msgid "Industry slug"
+msgstr ""
+
+msgid "Install demo content"
+msgstr ""
+
+msgid "Installs sample companies, jobs, candidates and pages so you can preview the theme."
+msgstr ""
+
+msgid "Integrations"
+msgstr ""
+
+msgid "Internal form (on-site)"
+msgstr ""
+
+msgid "Interview"
+msgstr ""
+
+msgid "Interviewing"
+msgstr ""
+
+msgid "Interviews"
+msgstr ""
+
+msgid "Invalid job."
+msgstr ""
+
+msgid "Invalid target."
+msgstr ""
+
+msgid "Invitation"
+msgstr ""
+
+msgid "Invitation sent."
+msgstr ""
+
+msgid "Invitation: %s"
+msgstr ""
+
+msgid "Invitations"
+msgstr ""
+
+msgid "Invite a candidate"
+msgstr ""
+
+msgid "Job"
+msgstr ""
+
+msgid "Job Alert"
+msgstr ""
+
+msgid "Job Alert Form"
+msgstr ""
+
+msgid "Job Alerts"
+msgstr ""
+
+msgid "Job Categories"
+msgstr ""
+
+msgid "Job Category"
+msgstr ""
+
+msgid "Job Credits"
+msgstr ""
+
+msgid "Job Description"
+msgstr ""
+
+msgid "Job Details"
+msgstr ""
+
+msgid "Job Expired"
+msgstr ""
+
+msgid "Job ID"
+msgstr ""
+
+msgid "Job Listings"
+msgstr ""
+
+msgid "Job Published"
+msgstr ""
+
+msgid "Job Search Bar"
+msgstr ""
+
+msgid "Job Tag"
+msgstr ""
+
+msgid "Job Tags"
+msgstr ""
+
+msgid "Job Title"
+msgstr ""
+
+msgid "Job Type"
+msgstr ""
+
+msgid "Job Types"
+msgstr ""
+
+msgid "Job Views — last 30 days"
+msgstr ""
+
+msgid "Job alert saved. You\\"
+msgstr ""
+
+msgid "Job details"
+msgstr ""
+
+msgid "Job overview"
+msgstr ""
+
+msgid "Job title or keyword"
+msgstr ""
+
+msgid "Job title, keyword or company"
+msgstr ""
+
+msgid "Jobs"
+msgstr ""
+
+msgid "Jobs Listing"
+msgstr ""
+
+msgid "Jobs Posted"
+msgstr ""
+
+msgid "Jobs Posted — last 6 months"
+msgstr ""
+
+msgid "Jobs Sidebar"
+msgstr ""
+
+msgid "Jobs allowed"
+msgstr ""
+
+msgid "Jobs per page"
+msgstr ""
+
+msgid "Jobs posted"
+msgstr ""
+
+msgid "Join"
+msgstr ""
+
+msgid "Join companies shaping tomorrow. Find your role."
+msgstr ""
+
+msgid "Keyword"
+msgstr ""
+
+msgid "Keyword placeholder"
+msgstr ""
+
+msgid "Labels"
+msgstr ""
+
+msgid "Latest from the Blog"
+msgstr ""
+
+msgid "Latest jobs"
+msgstr ""
+
+msgid "Layout"
+msgstr ""
+
+msgid "Learn more"
+msgstr ""
+
+msgid "Leave a comment"
+msgstr ""
+
+msgid "Leave a review"
+msgstr ""
+
+msgid "Less noise. Better jobs."
+msgstr ""
+
+msgid "Link"
+msgstr ""
+
+msgid "Linked Company Post ID (optional)"
+msgstr ""
+
+msgid "LinkedIn"
+msgstr ""
+
+msgid "Listing duration (days)"
+msgstr ""
+
+msgid "Live Jobs"
+msgstr ""
+
+msgid "Load more jobs"
+msgstr ""
+
+msgid "Loading…"
+msgstr ""
+
+msgid "Location"
+msgstr ""
+
+msgid "Location placeholder"
+msgstr ""
+
+msgid "Location-independent roles at companies that get it."
+msgstr ""
+
+msgid "Locations"
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "Logo"
+msgstr ""
+
+msgid "Loved by teams and candidates"
+msgstr ""
+
+msgid "Main Sidebar"
+msgstr ""
+
+msgid "Manage applications"
+msgstr ""
+
+msgid "Manage your jobs, applications, messages and profile."
+msgstr ""
+
+msgid "Mark Filled"
+msgstr ""
+
+msgid "Mark Open"
+msgstr ""
+
+msgid "Mark jobs as featured"
+msgstr ""
+
+msgid "Meeting"
+msgstr ""
+
+msgid "Meeting Invitation"
+msgstr ""
+
+msgid "Meeting link (Zoom / Meet)"
+msgstr ""
+
+msgid "Meeting scheduled and invitation sent."
+msgstr ""
+
+msgid "Meetings"
+msgstr ""
+
+msgid "Member since"
+msgstr ""
+
+msgid "Menu"
+msgstr ""
+
+msgid "Message"
+msgstr ""
+
+msgid "Message sent."
+msgstr ""
+
+msgid "Message this candidate"
+msgstr ""
+
+msgid "Messages"
+msgstr ""
+
+msgid "Move this job to trash?"
+msgstr ""
+
+msgid "My Applications"
+msgstr ""
+
+msgid "My Jobs"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Name, role or keyword"
+msgstr ""
+
+msgid "New"
+msgstr ""
+
+msgid "New Application"
+msgstr ""
+
+msgid "New Job"
+msgstr ""
+
+msgid "New User Registered"
+msgstr ""
+
+msgid "New Wire Transfer"
+msgstr ""
+
+msgid "New contact message"
+msgstr ""
+
+msgid "New jobs matching your alert \"%s\":"
+msgstr ""
+
+msgid "New message"
+msgstr ""
+
+msgid "New this week"
+msgstr ""
+
+msgid "New, hand-picked roles every Tuesday."
+msgstr ""
+
+msgid "Newsletter"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "No applications received yet."
+msgstr ""
+
+msgid "No candidates match your search."
+msgstr ""
+
+msgid "No candidates yet."
+msgstr ""
+
+msgid "No companies found."
+msgstr ""
+
+msgid "No invitations received yet."
+msgstr ""
+
+msgid "No jobs found"
+msgstr ""
+
+msgid "No jobs found in trash"
+msgstr ""
+
+msgid "No jobs found."
+msgstr ""
+
+msgid "No jobs match your search."
+msgstr ""
+
+msgid "No meetings scheduled yet."
+msgstr ""
+
+msgid "No messages yet."
+msgstr ""
+
+msgid "No posts found."
+msgstr ""
+
+msgid "No results found. Try a different search."
+msgstr ""
+
+msgid "No reviews yet — be the first to leave one."
+msgstr ""
+
+msgid "No reviews yet."
+msgstr ""
+
+msgid "Notes"
+msgstr ""
+
+msgid "Number"
+msgstr ""
+
+msgid "Number of categories"
+msgstr ""
+
+msgid "Number of companies"
+msgstr ""
+
+msgid "Number of jobs"
+msgstr ""
+
+msgid "Number to show:"
+msgstr ""
+
+msgid "Offered"
+msgstr ""
+
+msgid "Open Jobs"
+msgstr ""
+
+msgid "Open in map"
+msgstr ""
+
+msgid "Open positions (%d)"
+msgstr ""
+
+msgid "Or upload a resume (PDF/DOC)"
+msgstr ""
+
+msgid "Or upload resume (PDF/DOC)"
+msgstr ""
+
+msgid "Overview"
+msgstr ""
+
+msgid "Personal Site"
+msgstr ""
+
+msgid "Phone"
+msgstr ""
+
+msgid "Phone only"
+msgstr ""
+
+msgid "Photo"
+msgstr ""
+
+msgid "Pick the plan that grows with your hiring needs."
+msgstr ""
+
+msgid "Please complete all required fields."
+msgstr ""
+
+msgid "Please enter a valid email address."
+msgstr ""
+
+msgid "Please log in to bookmark jobs."
+msgstr ""
+
+msgid "Please log in to follow."
+msgstr ""
+
+msgid "Please provide your name and a valid email."
+msgstr ""
+
+msgid "Please sign in to post a job."
+msgstr ""
+
+msgid "Please sign in to view your dashboard."
+msgstr ""
+
+msgid "Policy URL"
+msgstr ""
+
+msgid "Popular:"
+msgstr ""
+
+msgid "Position Filled"
+msgstr ""
+
+msgid "Position filled"
+msgstr ""
+
+msgid "Post a Job"
+msgstr ""
+
+msgid "Post a Remote Job"
+msgstr ""
+
+msgid "Post a Role"
+msgstr ""
+
+msgid "Post a contract role"
+msgstr ""
+
+msgid "Post a job and start receiving applications today."
+msgstr ""
+
+msgid "Post a job in minutes and get applications from qualified candidates this week."
+msgstr ""
+
+msgid "Post a job in under 5 minutes."
+msgstr ""
+
+msgid "Post remote roles and find top global talent instantly."
+msgstr ""
+
+msgid "Post your first job"
+msgstr ""
+
+msgid "Post your first job in minutes."
+msgstr ""
+
+msgid "Post your opening in minutes and reach thousands of qualified candidates."
+msgstr ""
+
+msgid "Posted"
+msgstr ""
+
+msgid "Posted %s"
+msgstr ""
+
+msgid "Pricing"
+msgstr ""
+
+msgid "Pricing Table"
+msgstr ""
+
+msgid "Pricing plans"
+msgstr ""
+
+msgid "Primary Menu"
+msgstr ""
+
+msgid "Primary navigation"
+msgstr ""
+
+msgid "Profile"
+msgstr ""
+
+msgid "Profile saved."
+msgstr ""
+
+msgid "Questions, partnerships, support — we\\"
+msgstr ""
+
+msgid "Rate this candidate"
+msgstr ""
+
+msgid "Rating"
+msgstr ""
+
+msgid "Reach thousands of designers, marketers, and creators."
+msgstr ""
+
+msgid "Reach thousands of qualified candidates in minutes."
+msgstr ""
+
+msgid "Read more →"
+msgstr ""
+
+msgid "Ready to grow your team?"
+msgstr ""
+
+msgid "Ready to hire?"
+msgstr ""
+
+msgid "Received"
+msgstr ""
+
+msgid "Received Applications"
+msgstr ""
+
+msgid "Recent Jobs"
+msgstr ""
+
+msgid "Refine results"
+msgstr ""
+
+msgid "Register"
+msgstr ""
+
+msgid "Rejected"
+msgstr ""
+
+msgid "Remote"
+msgstr ""
+
+msgid "Remote Friendly"
+msgstr ""
+
+msgid "Remote by category"
+msgstr ""
+
+msgid "Remote jobs that fit your life."
+msgstr ""
+
+msgid "Remote only"
+msgstr ""
+
+msgid "Remote positions"
+msgstr ""
+
+msgid "Remote · Full Time"
+msgstr ""
+
+msgid "Remote-first · Freelance · Contract"
+msgstr ""
+
+msgid "Remote-friendly companies"
+msgstr ""
+
+msgid "Removed from bookmarks."
+msgstr ""
+
+msgid "Reply"
+msgstr ""
+
+msgid "Required columns: Name. Optional: Title, Location, Experience, Email, Resume URL, Available (1/0)."
+msgstr ""
+
+msgid "Required columns: Title, Company, Location. Optional: Salary Min, Salary Max, Apply Email, Apply URL, Featured (1/0), Status (publish/draft)."
+msgstr ""
+
+msgid "Resume"
+msgstr ""
+
+msgid "Resume Database"
+msgstr ""
+
+msgid "Resume URL"
+msgstr ""
+
+msgid "Review"
+msgstr ""
+
+msgid "Review of %s"
+msgstr ""
+
+msgid "Reviewing"
+msgstr ""
+
+msgid "Reviews"
+msgstr ""
+
+msgid "Reviews (%d)"
+msgstr ""
+
+msgid "Role"
+msgstr ""
+
+msgid "Roles at early-stage companies backed by top investors."
+msgstr ""
+
+msgid "Salary"
+msgstr ""
+
+msgid "Salary Max"
+msgstr ""
+
+msgid "Salary Min"
+msgstr ""
+
+msgid "Salary Period"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Save job"
+msgstr ""
+
+msgid "Save jobs from any listing to keep track of opportunities."
+msgstr ""
+
+msgid "Save profile"
+msgstr ""
+
+msgid "Save templates"
+msgstr ""
+
+msgid "Saved to your bookmarks."
+msgstr ""
+
+msgid "Saved."
+msgstr ""
+
+msgid "Schedule &amp; Send invite"
+msgstr ""
+
+msgid "Schedule a meeting"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Search Jobs"
+msgstr ""
+
+msgid "Search candidates by keyword, location, skill or availability."
+msgstr ""
+
+msgid "Search results for: %s"
+msgstr ""
+
+msgid "Search the site…"
+msgstr ""
+
+msgid "See Pricing"
+msgstr ""
+
+msgid "See all →"
+msgstr ""
+
+msgid "Select category"
+msgstr ""
+
+msgid "Select type"
+msgstr ""
+
+msgid "Send Invitation"
+msgstr ""
+
+msgid "Send Message"
+msgstr ""
+
+msgid "Send reply"
+msgstr ""
+
+msgid "Senior Product Designer"
+msgstr ""
+
+msgid "Sent"
+msgstr ""
+
+msgid "Sent invitations"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Share:"
+msgstr ""
+
+msgid "Show a list of featured companies."
+msgstr ""
+
+msgid "Show a list of the latest jobs."
+msgstr ""
+
+msgid "Show job count"
+msgstr ""
+
+msgid "Sidebar filter for job archives."
+msgstr ""
+
+msgid "Sidebar shown on the jobs archive and single job pages."
+msgstr ""
+
+msgid "Sign in"
+msgstr ""
+
+msgid "Sign in to apply"
+msgstr ""
+
+msgid "Sign in to leave a review."
+msgstr ""
+
+msgid "Similar jobs"
+msgstr ""
+
+msgid "Simple, transparent pricing"
+msgstr ""
+
+msgid "Site stats"
+msgstr ""
+
+msgid "Skill"
+msgstr ""
+
+msgid "Skills"
+msgstr ""
+
+msgid "Skills (comma-separated)"
+msgstr ""
+
+msgid "Skills in demand"
+msgstr ""
+
+msgid "Skip to content"
+msgstr ""
+
+msgid "Social"
+msgstr ""
+
+msgid "Something went wrong. Please try again."
+msgstr ""
+
+msgid "Start Free Trial"
+msgstr ""
+
+msgid "Starter"
+msgstr ""
+
+msgid "Stats Counter"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Subject"
+msgstr ""
+
+msgid "Submit Application"
+msgstr ""
+
+msgid "Submit Job"
+msgstr ""
+
+msgid "Submit Review"
+msgstr ""
+
+msgid "Submitted"
+msgstr ""
+
+msgid "Submitting…"
+msgstr ""
+
+msgid "Subscribe"
+msgstr ""
+
+msgid "Talent found here."
+msgstr ""
+
+msgid "Tell candidates who you are and how to reach you."
+msgstr ""
+
+msgid "Tell the team why you\\"
+msgstr ""
+
+msgid "Testimonials"
+msgstr ""
+
+msgid "Thanks for your review!"
+msgstr ""
+
+msgid "Thanks — we\\"
+msgstr ""
+
+msgid "Thanks! We\\"
+msgstr ""
+
+msgid "Thanks! Your job is awaiting moderation."
+msgstr ""
+
+msgid "The future of work is here."
+msgstr ""
+
+msgid "The hiring platform for modern teams."
+msgstr ""
+
+msgid "The page you were looking for can\\"
+msgstr ""
+
+msgid "The smarter way to hire"
+msgstr ""
+
+msgid "This account is deactivated. Contact support to reactivate."
+msgstr ""
+
+msgid "This company has no open positions right now."
+msgstr ""
+
+msgid "This is a remote-friendly position"
+msgstr ""
+
+msgid "This page took a coffee break."
+msgstr ""
+
+msgid "This position is no longer accepting applications."
+msgstr ""
+
+msgid "This week\\"
+msgstr ""
+
+msgid "Thousands of hand-curated roles. Zero noise."
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "Title:"
+msgstr ""
+
+msgid "Toggle theme"
+msgstr ""
+
+msgid "Top categories"
+msgstr ""
+
+msgid "Top companies hiring"
+msgstr ""
+
+msgid "Top companies hiring now"
+msgstr ""
+
+msgid "Top creative employers"
+msgstr ""
+
+msgid "Trending right now"
+msgstr ""
+
+msgid "Trusted by 12,000+ companies"
+msgstr ""
+
+msgid "Try clearing your filters or broadening your keywords."
+msgstr ""
+
+msgid "Twitter / X"
+msgstr ""
+
+msgid "Unknown"
+msgstr ""
+
+msgid "Unread Messages"
+msgstr ""
+
+msgid "Unsubscribe from this alert:"
+msgstr ""
+
+msgid "Upload a CSV file to bulk-import jobs or candidates. The first row must be a header row."
+msgstr ""
+
+msgid "Urgent"
+msgstr ""
+
+msgid "Urgent Hiring"
+msgstr ""
+
+msgid "Urgent openings"
+msgstr ""
+
+msgid "Use these placeholders: {site}, {name}, {email}, {job}, {url}, {resume}, {cover}, {status}, {when}, {notes}."
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "Verified"
+msgstr ""
+
+msgid "Verified Company"
+msgstr ""
+
+msgid "Video URL (YouTube/Vimeo)"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
+msgid "View Job"
+msgstr ""
+
+msgid "View Pricing"
+msgstr ""
+
+msgid "View Profile"
+msgstr ""
+
+msgid "View all jobs →"
+msgstr ""
+
+msgid "View profile"
+msgstr ""
+
+msgid "Views"
+msgstr ""
+
+msgid "Visit"
+msgstr ""
+
+msgid "We use cookies to give you the best experience on our site."
+msgstr ""
+
+msgid "Website"
+msgstr ""
+
+msgid "Welcome back, %s"
+msgstr ""
+
+msgid "Welcome to {site}"
+msgstr ""
+
+msgid "What people say"
+msgstr ""
+
+msgid "When"
+msgstr ""
+
+msgid "Where great careers begin."
+msgstr ""
+
+msgid "WooCommerce product ID to mark as \"Popular\""
+msgstr ""
+
+msgid "Work at a startup you\\"
+msgstr ""
+
+msgid "Work from anywhere"
+msgstr ""
+
+msgid "Years of Experience"
+msgstr ""
+
+msgid "Years of experience"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "You can\\"
+msgstr ""
+
+msgid "You haven\\"
+msgstr ""
+
+msgid "You\\"
+msgstr ""
+
+msgid "Your account"
+msgstr ""
+
+msgid "Your application has been sent. Good luck!"
+msgstr ""
+
+msgid "Your email"
+msgstr ""
+
+msgid "Your experience"
+msgstr ""
+
+msgid "Your job has been published."
+msgstr ""
+
+msgid "Your name"
+msgstr ""
+
+msgid "Your next career move starts here"
+msgstr ""
+
+msgid "[%1$s] New application: %2$s"
+msgstr ""
+
+msgid "[%1$s] Your application status: %2$s"
+msgstr ""
+
+msgid "[%s] %d new jobs for you"
+msgstr ""
+
+msgid "[%s] Interview invitation"
+msgstr ""
+
+msgid "[%s] New message from %s"
+msgstr ""
+
+msgid "[%s] You\\"
+msgstr ""
+
+msgid "[%s] Your sign-in link"
+msgstr ""
+
+msgid "[{site}] Interview invitation"
+msgstr ""
+
+msgid "[{site}] New application: {job}"
+msgstr ""
+
+msgid "[{site}] New wire transfer received"
+msgstr ""
+
+msgid "[{site}] Your application: {status}"
+msgstr ""
+
+msgid "[{site}] Your job has expired"
+msgstr ""
+
+msgid "[{site}] Your job is live"
+msgstr ""
+
+msgid "ago"
+msgstr ""
+
+msgid "all jobs"
+msgstr ""
+
+msgid "e.g. Senior Frontend Developer"
+msgstr ""
+
+msgid "e.g. designer"
+msgstr ""
+
+msgid "employees"
+msgstr ""
+
+msgid "jbportal"
+msgstr ""
+
+msgid "jbportal Analytics"
+msgstr ""
+
+msgid "jbportal Demo Data"
+msgstr ""
+
+msgid "jbportal Options"
+msgstr ""
+
+msgid "jbportal: Featured Companies"
+msgstr ""
+
+msgid "jbportal: Job Filter"
+msgstr ""
+
+msgid "jbportal: Recent Jobs"
+msgstr ""
+
+msgid "jobs"
+msgstr ""
+
+msgid "you@example.com"
+msgstr ""
+
+msgid "© %s jbportal. All rights reserved."
+msgstr ""
+
+msgid "— select a job —"
+msgstr ""
+

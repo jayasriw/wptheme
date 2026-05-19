@@ -26,11 +26,14 @@ function jbportal_scripts() {
 		'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 		'nonce'   => wp_create_nonce( 'jbportal_nonce' ),
 		'i18n'    => array(
-			'applying' => esc_html__( 'Submitting…', 'jbportal' ),
-			'applied'  => esc_html__( 'Application sent!', 'jbportal' ),
-			'error'    => esc_html__( 'Something went wrong. Please try again.', 'jbportal' ),
-			'saved'    => esc_html__( 'Saved to your bookmarks.', 'jbportal' ),
-			'removed'  => esc_html__( 'Removed from bookmarks.', 'jbportal' ),
+			'applying'  => esc_html__( 'Submitting…', 'jbportal' ),
+			'applied'   => esc_html__( 'Application sent!', 'jbportal' ),
+			'error'     => esc_html__( 'Something went wrong. Please try again.', 'jbportal' ),
+			'saved'     => esc_html__( 'Saved to your bookmarks.', 'jbportal' ),
+			'removed'   => esc_html__( 'Removed from bookmarks.', 'jbportal' ),
+			'load_more' => esc_html__( 'Load more jobs', 'jbportal' ),
+			'loading'   => esc_html__( 'Loading…', 'jbportal' ),
+			'no_more'   => esc_html__( 'All jobs loaded.', 'jbportal' ),
 		),
 	) );
 

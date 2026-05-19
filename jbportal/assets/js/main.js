@@ -134,5 +134,41 @@
 		$('.jb-apply-form').on('submit', function () {
 			$(this).find('button[type=submit]').prop('disabled', true).text(jbportal.i18n.applying);
 		});
+
+		// Load more jobs (archive page).
+		$(document).on('click', '.jb-load-more', function () {
+			var $btn  = $(this);
+			var $msg  = $btn.siblings('.jb-load-more-msg');
+			var page  = parseInt( $btn.data('page'), 10 ) + 1;
+			var max   = parseInt( $btn.data('max'), 10 );
+			var query = $btn.data('query');
+
+			$btn.prop('disabled', true).text(jbportal.i18n.loading || 'Loading…');
+			$msg.hide();
+
+			$.post(jbportal.ajaxUrl, {
+				action:  'jbportal_load_more_jobs',
+				nonce:   jbportal.nonce,
+				page:    page,
+				query:   JSON.stringify(query)
+			}).done(function (resp) {
+				if (resp && resp.success && resp.data.html) {
+					$('#jb-jobs-container').append(resp.data.html);
+					$btn.data('page', page);
+					if (page >= max) {
+						$btn.hide();
+						$msg.text(jbportal.i18n.no_more || 'All jobs loaded.').show();
+					} else {
+						$btn.prop('disabled', false).text(jbportal.i18n.load_more || 'Load more jobs');
+					}
+				} else {
+					$btn.hide();
+					$msg.text(jbportal.i18n.no_more || 'No more jobs.').show();
+				}
+			}).fail(function () {
+				$btn.prop('disabled', false).text(jbportal.i18n.load_more || 'Load more jobs');
+				$msg.text(jbportal.i18n.error).show();
+			});
+		});
 	});
 })(jQuery);

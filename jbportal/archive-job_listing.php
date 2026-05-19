@@ -38,11 +38,24 @@ get_header(); ?>
 	</aside>
 
 	<div class="jb-content">
-		<?php if ( have_posts() ) : ?>
-			<div class="jb-jobs-list">
+		<?php if ( have_posts() ) :
+			global $wp_query;
+			$max_pages = $wp_query->max_num_pages;
+			?>
+			<div class="jb-jobs-list" id="jb-jobs-container">
 				<?php while ( have_posts() ) : the_post(); get_template_part( 'template-parts/content', 'job' ); endwhile; ?>
 			</div>
-			<?php the_posts_pagination( array( 'prev_text' => '←', 'next_text' => '→' ) ); ?>
+			<?php if ( $max_pages > 1 ) : ?>
+				<div class="jb-load-more-wrap" style="text-align:center;margin-top:2rem">
+					<button
+						class="jb-btn jb-btn-ghost jb-load-more"
+						data-page="1"
+						data-max="<?php echo esc_attr( $max_pages ); ?>"
+						data-query="<?php echo esc_attr( wp_json_encode( $wp_query->query ) ); ?>"
+					><?php esc_html_e( 'Load more jobs', 'jbportal' ); ?></button>
+					<span class="jb-load-more-msg" style="display:none;margin-left:.75rem;color:var(--jb-muted)"></span>
+				</div>
+			<?php endif; ?>
 		<?php else : ?>
 			<div class="jb-empty">
 				<h2><?php esc_html_e( 'No jobs match your search.', 'jbportal' ); ?></h2>

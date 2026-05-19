@@ -10,14 +10,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * [jbportal_jobs limit="6" featured="1" category="engineering"]
+ * [jbportal_jobs limit="6" featured="1" urgent="1" remote="1" category="engineering" type="full-time" columns="3"]
  */
 function jbportal_shortcode_jobs( $atts ) {
 	$atts = shortcode_atts( array(
 		'limit'    => 6,
 		'featured' => 0,
+		'urgent'   => 0,
+		'remote'   => 0,
 		'category' => '',
 		'type'     => '',
+		'columns'  => 3,
 	), $atts, 'jbportal_jobs' );
 
 	$args = array(
@@ -25,9 +28,22 @@ function jbportal_shortcode_jobs( $atts ) {
 		'posts_per_page' => (int) $atts['limit'],
 		'no_found_rows'  => true,
 	);
+
+	$meta_query = array();
 	if ( $atts['featured'] ) {
-		$args['meta_query'] = array( array( 'key' => '_job_featured', 'value' => '1' ) );
+		$meta_query[] = array( 'key' => '_job_featured', 'value' => '1' );
 	}
+	if ( $atts['urgent'] ) {
+		$meta_query[] = array( 'key' => '_job_urgent', 'value' => '1' );
+	}
+	if ( $atts['remote'] ) {
+		$meta_query[] = array( 'key' => '_job_remote', 'value' => '1' );
+	}
+	if ( $meta_query ) {
+		$meta_query['relation'] = 'AND';
+		$args['meta_query']     = $meta_query;
+	}
+
 	if ( $atts['category'] || $atts['type'] ) {
 		$tax_query = array( 'relation' => 'AND' );
 		if ( $atts['category'] ) {
@@ -39,10 +55,13 @@ function jbportal_shortcode_jobs( $atts ) {
 		$args['tax_query'] = $tax_query;
 	}
 
+	$cols = max( 1, min( 3, (int) $atts['columns'] ) );
+	$grid_class = 1 === $cols ? 'jb-jobs-list' : ( 2 === $cols ? 'jb-jobs-grid jb-jobs-grid-2' : 'jb-jobs-grid' );
+
 	$q = new WP_Query( $args );
 	ob_start();
 	if ( $q->have_posts() ) {
-		echo '<div class="jb-jobs-grid">';
+		echo '<div class="' . esc_attr( $grid_class ) . '">';
 		while ( $q->have_posts() ) {
 			$q->the_post();
 			get_template_part( 'template-parts/content', 'job' );
@@ -57,15 +76,19 @@ function jbportal_shortcode_jobs( $atts ) {
 add_shortcode( 'jbportal_jobs', 'jbportal_shortcode_jobs' );
 
 /**
- * [jbportal_companies limit="8"]
+ * [jbportal_companies limit="8" industry="technology"]
  */
 function jbportal_shortcode_companies( $atts ) {
-	$atts = shortcode_atts( array( 'limit' => 8 ), $atts, 'jbportal_companies' );
-	$q = new WP_Query( array(
+	$atts = shortcode_atts( array( 'limit' => 8, 'industry' => '' ), $atts, 'jbportal_companies' );
+	$args = array(
 		'post_type'      => 'company',
 		'posts_per_page' => (int) $atts['limit'],
 		'no_found_rows'  => true,
-	) );
+	);
+	if ( $atts['industry'] ) {
+		$args['tax_query'] = array( array( 'taxonomy' => 'industry', 'field' => 'slug', 'terms' => array_map( 'trim', explode( ',', $atts['industry'] ) ) ) );
+	}
+	$q = new WP_Query( $args );
 	ob_start();
 	if ( $q->have_posts() ) {
 		echo '<div class="jb-companies-grid">';
@@ -81,10 +104,10 @@ function jbportal_shortcode_companies( $atts ) {
 add_shortcode( 'jbportal_companies', 'jbportal_shortcode_companies' );
 
 /**
- * [jbportal_categories limit="8"]
+ * [jbportal_categories limit="8" show_count="1"]
  */
 function jbportal_shortcode_categories( $atts ) {
-	$atts  = shortcode_atts( array( 'limit' => 8 ), $atts, 'jbportal_categories' );
+	$atts  = shortcode_atts( array( 'limit' => 8, 'show_count' => 1 ), $atts, 'jbportal_categories' );
 	$terms = get_terms( array( 'taxonomy' => 'job_category', 'hide_empty' => false, 'number' => (int) $atts['limit'] ) );
 	if ( ! $terms || is_wp_error( $terms ) ) {
 		return '';
@@ -93,15 +116,16 @@ function jbportal_shortcode_categories( $atts ) {
 	ob_start();
 	echo '<div class="jb-categories-grid">';
 	$i = 0;
+	$show_count = ! empty( $atts['show_count'] ) && '0' !== (string) $atts['show_count'];
 	foreach ( $terms as $t ) {
-		$icon = $icons[ $i % count( $icons ) ];
+		$icon        = $icons[ $i % count( $icons ) ];
+		$count_html  = $show_count ? '<span class="jb-cat-count">' . (int) $t->count . ' ' . esc_html__( 'jobs', 'jbportal' ) . '</span>' : '';
 		printf(
-			'<a class="jb-category" href="%1$s"><span class="jb-cat-icon" data-icon="%4$s"></span><span class="jb-cat-name">%2$s</span><span class="jb-cat-count">%3$d %5$s</span></a>',
+			'<a class="jb-category" href="%1$s"><span class="jb-cat-icon" data-icon="%3$s"></span><span class="jb-cat-name">%2$s</span>%4$s</a>',
 			esc_url( get_term_link( $t ) ),
 			esc_html( $t->name ),
-			(int) $t->count,
 			esc_attr( $icon ),
-			esc_html__( 'jobs', 'jbportal' )
+			$count_html // already escaped above
 		);
 		$i++;
 	}
