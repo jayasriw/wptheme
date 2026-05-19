@@ -13,6 +13,38 @@ function jbportal_add_meta_boxes() {
 	add_meta_box( 'jbportal_job_details', __( 'Job Details', 'jbportal' ), 'jbportal_job_details_cb', 'job_listing', 'normal', 'high' );
 	add_meta_box( 'jbportal_company_details', __( 'Company Details', 'jbportal' ), 'jbportal_company_details_cb', 'company', 'normal', 'high' );
 	add_meta_box( 'jbportal_candidate_details', __( 'Candidate Details', 'jbportal' ), 'jbportal_candidate_details_cb', 'candidate', 'normal', 'high' );
+	add_meta_box( 'jbportal_application_details', __( 'Application Details', 'jbportal' ), 'jbportal_application_details_cb', 'job_application', 'side', 'high' );
+}
+
+function jbportal_application_details_cb( $post ) {
+	wp_nonce_field( 'jbportal_save_meta', 'jbportal_meta_nonce' );
+	$status   = get_post_meta( $post->ID, '_application_status', true ) ?: 'new';
+	$statuses = jbportal_application_statuses();
+	?>
+	<p><label><strong><?php esc_html_e( 'Status', 'jbportal' ); ?></strong></label>
+		<select name="_application_status" class="widefat">
+			<?php foreach ( $statuses as $key => $label ) {
+				printf( '<option value="%s" %s>%s</option>', esc_attr( $key ), selected( $status, $key, false ), esc_html( $label ) );
+			} ?>
+		</select>
+	</p>
+	<?php
+	jbportal_text_field( $post->ID, '_application_name', __( 'Applicant Name', 'jbportal' ) );
+	jbportal_text_field( $post->ID, '_application_email', __( 'Email', 'jbportal' ), 'email' );
+	jbportal_text_field( $post->ID, '_application_phone', __( 'Phone', 'jbportal' ) );
+	jbportal_text_field( $post->ID, '_application_resume_url', __( 'Resume URL', 'jbportal' ), 'url' );
+	jbportal_text_field( $post->ID, '_application_job_id', __( 'Job ID', 'jbportal' ), 'number' );
+}
+
+function jbportal_application_statuses() {
+	return array(
+		'new'          => __( 'New', 'jbportal' ),
+		'reviewing'    => __( 'Reviewing', 'jbportal' ),
+		'interviewing' => __( 'Interviewing', 'jbportal' ),
+		'offered'      => __( 'Offered', 'jbportal' ),
+		'hired'        => __( 'Hired', 'jbportal' ),
+		'rejected'     => __( 'Rejected', 'jbportal' ),
+	);
 }
 add_action( 'add_meta_boxes', 'jbportal_add_meta_boxes' );
 
@@ -104,6 +136,7 @@ function jbportal_save_meta( $post_id ) {
 		'_company_founded', '_company_twitter', '_company_linkedin', '_company_facebook', '_company_verified',
 		'_candidate_title', '_candidate_location', '_candidate_email', '_candidate_phone', '_candidate_experience',
 		'_candidate_expected_salary', '_candidate_resume_url', '_candidate_linkedin', '_candidate_website', '_candidate_available',
+		'_application_status', '_application_name', '_application_email', '_application_phone', '_application_resume_url', '_application_job_id',
 	);
 
 	foreach ( $keys as $k ) {

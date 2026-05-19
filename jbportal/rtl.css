@@ -1,0 +1,22 @@
+/*
+Theme Name: jbportal
+*/
+
+/* RTL adjustments — most layout is grid/flex and works in either direction.
+   This file flips a few specific spacings and the star picker. */
+
+body { direction: rtl; }
+
+.jb-search-hero-field { border-right: 0; border-left: 1px solid var(--jb-border); }
+.jb-search-hero-field:last-of-type { border-left: 0; }
+
+.jb-hero-stats li { padding-left: 0; padding-right: 1.25rem; }
+.jb-hero-stats li::before { left: auto; right: 0; }
+
+.jb-plan-features li { padding-left: 0; padding-right: 1.5rem; }
+.jb-plan-features li::before { left: auto; right: 0; }
+
+.jb-hero-card-2 { right: auto; left: 0; }
+.jb-hero-card-3 { right: auto; left: -10px; }
+
+.jb-star-picker { flex-direction: row; }

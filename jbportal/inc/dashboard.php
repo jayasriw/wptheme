@@ -73,3 +73,40 @@ function jbportal_handle_dashboard_actions() {
 	exit;
 }
 add_action( 'template_redirect', 'jbportal_handle_dashboard_actions' );
+
+/**
+ * Update application status from the employer dashboard.
+ */
+function jbportal_update_app_status() {
+	$app_id = isset( $_POST['app_id'] ) ? (int) $_POST['app_id'] : 0;
+	if ( ! $app_id || ! current_user_can( 'edit_post', $app_id ) ) {
+		// Allow the job's author to update too.
+		$job_id = (int) get_post_meta( $app_id, '_application_job_id', true );
+		if ( ! $job_id || (int) get_post_field( 'post_author', $job_id ) !== get_current_user_id() ) {
+			wp_die( esc_html__( 'You can\'t do that.', 'jbportal' ) );
+		}
+	}
+	check_admin_referer( 'jbportal_app_status_' . $app_id );
+
+	$status   = sanitize_key( wp_unslash( $_POST['status'] ?? 'new' ) );
+	$statuses = jbportal_application_statuses();
+	if ( ! isset( $statuses[ $status ] ) ) {
+		$status = 'new';
+	}
+	update_post_meta( $app_id, '_application_status', $status );
+
+	// Notify applicant.
+	$applicant_email = get_post_meta( $app_id, '_application_email', true );
+	$job_id          = (int) get_post_meta( $app_id, '_application_job_id', true );
+	if ( is_email( $applicant_email ) ) {
+		wp_mail(
+			$applicant_email,
+			sprintf( __( '[%1$s] Your application status: %2$s', 'jbportal' ), get_bloginfo( 'name' ), $statuses[ $status ] ),
+			sprintf( __( "Your application for \"%1\$s\" is now: %2\$s\n\n%3\$s", 'jbportal' ), get_the_title( $job_id ), $statuses[ $status ], get_permalink( $job_id ) )
+		);
+	}
+
+	wp_safe_redirect( wp_get_referer() ?: home_url( '/dashboard/?tab=received' ) );
+	exit;
+}
+add_action( 'admin_post_jbportal_update_app_status', 'jbportal_update_app_status' );

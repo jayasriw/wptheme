@@ -78,9 +78,18 @@ while ( have_posts() ) :
 				<p><?php esc_html_e( 'This company has no open positions right now.', 'jbportal' ); ?></p>
 			<?php endif;
 			wp_reset_postdata(); ?>
+
+			<?php jbportal_render_company_reviews( $cid ); ?>
 		</article>
 
 		<aside class="jb-sidebar">
+			<?php if ( $address ) : ?>
+				<div class="jb-card jb-map-card">
+					<h3><?php esc_html_e( 'Location', 'jbportal' ); ?></h3>
+					<iframe class="jb-map" loading="lazy" referrerpolicy="no-referrer" src="https://www.openstreetmap.org/export/embed.html?bbox=&layer=mapnik&marker=<?php echo esc_attr( urlencode( $address ) ); ?>" style="border:0;width:100%;height:220px;border-radius:8px"></iframe>
+					<a class="jb-btn jb-btn-ghost jb-btn-sm" target="_blank" rel="noopener" href="https://www.openstreetmap.org/search?query=<?php echo esc_attr( urlencode( $address ) ); ?>"><?php esc_html_e( 'Open in map', 'jbportal' ); ?></a>
+				</div>
+			<?php endif; ?>
 			<div class="jb-card">
 				<h3><?php esc_html_e( 'Contact', 'jbportal' ); ?></h3>
 				<ul class="jb-info-list">

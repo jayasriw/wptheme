@@ -47,38 +47,63 @@ jbportal/
 
 ## Feature parity with the reference theme
 
-| Feature                              | jbportal |
-|--------------------------------------|----------|
-| Job listings CPT                     | Yes      |
-| Companies CPT                        | Yes      |
-| Candidates CPT                       | Yes      |
-| Applications CPT                     | Yes      |
-| Categories / Types / Locations / Skills | Yes   |
-| Hero with combined search            | Yes      |
-| Job archive with advanced filters    | Yes      |
-| Featured / urgent / remote badges    | Yes      |
-| Bookmarks (AJAX)                     | Yes      |
-| Front-end "Post a Job"               | Yes      |
-| Apply form (file upload + URL)       | Yes      |
-| Employer / Candidate dashboard       | Yes      |
-| Pricing plans                        | Yes      |
-| Testimonials                         | Yes      |
-| Contact page (wp_mail)               | Yes      |
-| Newsletter subscribe                 | Yes      |
-| Customizer (colors, hero, copy)      | Yes      |
-| Custom widgets                       | Yes      |
-| Shortcodes                           | Yes      |
-| 404, search, comments, RSS           | Yes      |
+| Feature                                | jbportal |
+|----------------------------------------|----------|
+| Job listings CPT                       | Yes      |
+| Companies CPT                          | Yes      |
+| Candidates CPT                         | Yes      |
+| Applications CPT                       | Yes      |
+| Job alerts CPT (saved searches)        | Yes      |
+| Company reviews CPT (1–5 stars)        | Yes      |
+| Direct messages CPT (employer ⇄ candidate) | Yes  |
+| Categories / Types / Locations / Skills / Industries / Tags | Yes |
+| Hero with combined search              | Yes      |
+| Job archive with advanced filters      | Yes      |
+| Featured / urgent / remote badges      | Yes      |
+| Bookmarks (AJAX)                       | Yes      |
+| Front-end "Post a Job"                 | Yes      |
+| Apply form (file upload + URL)         | Yes      |
+| Application status pipeline (new → reviewing → interviewing → offered → hired/rejected) | Yes |
+| Auto-expire jobs (cron + deadline)     | Yes      |
+| Daily job-alert email digest (cron)    | Yes      |
+| Employer / Candidate dashboard tabs    | Yes      |
+| Employer & Candidate roles + capabilities | Yes   |
+| Front-end company profile editor       | Yes      |
+| Front-end candidate profile editor     | Yes      |
+| Resume database with filters           | Yes      |
+| Direct messaging in dashboard          | Yes      |
+| Pricing plans                          | Yes      |
+| Paid posting + featured upgrade via WooCommerce | Yes |
+| Job credits per user                   | Yes      |
+| Testimonials                           | Yes      |
+| Contact page (wp_mail)                 | Yes      |
+| Newsletter subscribe                   | Yes      |
+| Customizer (colors, hero, copy)        | Yes      |
+| Custom widgets                         | Yes      |
+| Shortcodes                             | Yes      |
+| Gutenberg block patterns + dynamic blocks | Yes   |
+| One-click demo data importer           | Yes      |
+| Map embed on job & company pages       | Yes      |
+| Magic-link sign-in (passwordless email) | Yes     |
+| Social login hooks (Google/Facebook via plugin) | Yes |
+| Dark mode (auto / light / dark toggle) | Yes      |
+| RTL stylesheet                         | Yes      |
+| Translation-ready (.pot template)      | Yes      |
+| 404, search, comments, RSS             | Yes      |
 
 ## Setup
 
 1. Drop the `jbportal` folder into `wp-content/themes/` and activate the theme.
 2. Visit Settings -> Permalinks once to flush the rewrite rules.
-3. Create the following pages and assign matching templates:
-   - `Post a Job` -> *Post a Job*
-   - `Dashboard` -> *Dashboard*
-   - `Pricing` -> *Pricing*
-   - `Contact` -> *Contact*
+3. Or use **Tools → jbportal Demo Data** to one-click install sample companies, jobs, candidates and all the pages below.
+4. If creating pages manually, assign these templates:
+   - `Post a Job` → *Post a Job*
+   - `Dashboard` → *Dashboard*
+   - `Pricing` → *Pricing*
+   - `Contact` → *Contact*
+   - `Edit Company Profile` → *Employer Profile (Edit Company)*
+   - `Edit Candidate Profile` → *Candidate Profile (Edit)*
+   - `Resumes` → *Resume Database*
 4. Open Appearance -> Customize -> jbportal Options to tune colors and hero copy.
 
 ## Color scheme

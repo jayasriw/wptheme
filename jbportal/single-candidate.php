@@ -61,6 +61,19 @@ while ( have_posts() ) :
 					<a class="jb-btn jb-btn-primary" href="<?php echo esc_url( $resume ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Download Resume', 'jbportal' ); ?></a>
 				<?php endif; ?>
 			</div>
+
+			<?php if ( is_user_logged_in() && get_the_author_meta( 'ID' ) && get_the_author_meta( 'ID' ) !== get_current_user_id() ) : ?>
+				<div class="jb-card">
+					<h3><?php esc_html_e( 'Message this candidate', 'jbportal' ); ?></h3>
+					<form class="jb-form" method="post">
+						<?php wp_nonce_field( 'jbportal_send_message', 'jbportal_message_nonce' ); ?>
+						<input type="hidden" name="to_user" value="<?php echo esc_attr( get_the_author_meta( 'ID' ) ); ?>">
+						<label><?php esc_html_e( 'Subject', 'jbportal' ); ?><input type="text" name="msg_subject" required></label>
+						<label><?php esc_html_e( 'Message', 'jbportal' ); ?><textarea name="msg_body" rows="5" required></textarea></label>
+						<button class="jb-btn jb-btn-primary" type="submit"><?php esc_html_e( 'Send Message', 'jbportal' ); ?></button>
+					</form>
+				</div>
+			<?php endif; ?>
 		</aside>
 	</div>
 <?php endwhile;

@@ -67,6 +67,7 @@ function jbportal_handle_application() {
 		update_post_meta( $app_id, '_application_phone', $phone );
 		update_post_meta( $app_id, '_application_resume_url', $resume_url );
 		update_post_meta( $app_id, '_application_user_id', get_current_user_id() );
+		update_post_meta( $app_id, '_application_status', 'new' );
 
 		// Notify the job poster / apply email.
 		$to = get_post_meta( $job_id, '_job_apply_email', true );
@@ -160,6 +161,12 @@ function jbportal_handle_job_submission() {
 	if ( $category ) {
 		wp_set_object_terms( $post_id, $category, 'job_category' );
 	}
+
+	/**
+	 * Fires after a front-end job submission so integrations (Woo, alerts…)
+	 * can adjust meta or status.
+	 */
+	do_action( 'jbportal_after_job_submission', $post_id, get_current_user_id() );
 
 	set_transient( 'jbportal_post_ok_' . get_current_user_id(), 'pending' === $status
 		? __( 'Thanks! Your job is awaiting moderation.', 'jbportal' )

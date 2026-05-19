@@ -3,6 +3,18 @@
 	'use strict';
 
 	$(function () {
+		// Theme toggle (light / dark / auto).
+		var saved = localStorage.getItem('jbportal_theme') || 'auto';
+		document.documentElement.setAttribute('data-jb-theme', saved);
+
+		$(document).on('click', '.jb-theme-toggle', function () {
+			var cur = document.documentElement.getAttribute('data-jb-theme') || 'auto';
+			var next = cur === 'auto' ? 'light' : (cur === 'light' ? 'dark' : 'auto');
+			document.documentElement.setAttribute('data-jb-theme', next);
+			localStorage.setItem('jbportal_theme', next);
+			$(this).attr('data-state', next).find('.jb-theme-toggle-label').text(next);
+		});
+
 		// Mobile nav toggle.
 		$(document).on('click', '.jb-nav-toggle', function () {
 			var $nav = $(this).closest('.jb-nav');

@@ -140,6 +140,13 @@ while ( have_posts() ) :
 				</div>
 			<?php endif; ?>
 
+			<?php if ( $location ) : ?>
+				<div class="jb-card jb-map-card">
+					<h3><?php esc_html_e( 'Location', 'jbportal' ); ?></h3>
+					<iframe class="jb-map" loading="lazy" referrerpolicy="no-referrer" src="https://www.openstreetmap.org/export/embed.html?bbox=&layer=mapnik&marker=<?php echo esc_attr( urlencode( $location ) ); ?>" style="border:0;width:100%;height:200px;border-radius:8px"></iframe>
+				</div>
+			<?php endif; ?>
+
 			<?php if ( is_active_sidebar( 'sidebar-jobs' ) ) { dynamic_sidebar( 'sidebar-jobs' ); } ?>
 		</aside>
 	</div>

@@ -25,6 +25,7 @@
 			<?php if ( $email ) : ?><span>✉ <?php echo esc_html( $email ); ?></span><?php endif; ?>
 		</div>
 		<div class="jb-topbar-right">
+			<button class="jb-theme-toggle" type="button" title="<?php esc_attr_e( 'Toggle theme', 'jbportal' ); ?>">🌓 <span class="jb-theme-toggle-label">auto</span></button>
 			<?php if ( is_user_logged_in() ) : ?>
 				<a href="<?php echo esc_url( home_url( '/dashboard/' ) ); ?>"><?php esc_html_e( 'Dashboard', 'jbportal' ); ?></a>
 				<a href="<?php echo esc_url( wp_logout_url( home_url( '/' ) ) ); ?>"><?php esc_html_e( 'Log out', 'jbportal' ); ?></a>
