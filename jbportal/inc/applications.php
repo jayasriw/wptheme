@@ -66,6 +66,7 @@ function jbportal_handle_application() {
 		update_post_meta( $app_id, '_application_email', $email );
 		update_post_meta( $app_id, '_application_phone', $phone );
 		update_post_meta( $app_id, '_application_resume_url', $resume_url );
+		update_post_meta( $app_id, '_application_cover_letter', $cover );
 		update_post_meta( $app_id, '_application_user_id', get_current_user_id() );
 		update_post_meta( $app_id, '_application_status', 'new' );
 

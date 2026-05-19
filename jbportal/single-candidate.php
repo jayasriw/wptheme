@@ -8,17 +8,32 @@
 get_header();
 while ( have_posts() ) :
 	the_post();
-	$cid     = get_the_ID();
-	$title   = get_post_meta( $cid, '_candidate_title', true );
-	$loc     = get_post_meta( $cid, '_candidate_location', true );
-	$email   = get_post_meta( $cid, '_candidate_email', true );
-	$phone   = get_post_meta( $cid, '_candidate_phone', true );
-	$exp     = get_post_meta( $cid, '_candidate_experience', true );
-	$salary  = get_post_meta( $cid, '_candidate_expected_salary', true );
-	$resume  = get_post_meta( $cid, '_candidate_resume_url', true );
-	$linked  = get_post_meta( $cid, '_candidate_linkedin', true );
-	$site    = get_post_meta( $cid, '_candidate_website', true );
-	$avail   = (bool) get_post_meta( $cid, '_candidate_available', true );
+	$cid        = get_the_ID();
+	$title      = get_post_meta( $cid, '_candidate_title', true );
+	$loc        = get_post_meta( $cid, '_candidate_location', true );
+	$email      = get_post_meta( $cid, '_candidate_email', true );
+	$phone      = get_post_meta( $cid, '_candidate_phone', true );
+	$exp        = get_post_meta( $cid, '_candidate_experience', true );
+	$salary     = get_post_meta( $cid, '_candidate_expected_salary', true );
+	$resume     = get_post_meta( $cid, '_candidate_resume_url', true );
+	$linked     = get_post_meta( $cid, '_candidate_linkedin', true );
+	$site       = get_post_meta( $cid, '_candidate_website', true );
+	$avail      = (bool) get_post_meta( $cid, '_candidate_available', true );
+	$video_url  = get_post_meta( $cid, '_candidate_video_url', true );
+	$visibility = get_post_meta( $cid, '_candidate_resume_visibility', true ) ?: 'public';
+
+	// Determine resume/contact visibility based on _candidate_resume_visibility.
+	$viewer_id   = get_current_user_id();
+	$cand_author = (int) get_post_field( 'post_author', $cid );
+	$is_admin    = $viewer_id && current_user_can( 'manage_options' );
+	$is_owner    = $viewer_id && ( $viewer_id === $cand_author );
+	if ( 'public' === $visibility ) {
+		$visibility_ok = true;
+	} elseif ( 'employers' === $visibility ) {
+		$visibility_ok = $is_owner || $is_admin || ( $viewer_id && jbportal_user_is_employer( $viewer_id ) );
+	} else { // private
+		$visibility_ok = $is_owner || $is_admin;
+	}
 	?>
 	<section class="jb-company-banner">
 		<div class="jb-container jb-company-banner-inner">

@@ -157,10 +157,94 @@ class JBPortal_Featured_Companies_Widget extends WP_Widget {
 	}
 }
 
+class JBPortal_Related_Jobs_Widget extends WP_Widget {
+	public function __construct() {
+		parent::__construct( 'jbportal_related_jobs', __( 'jbportal: Related Jobs', 'jbportal' ), array(
+			'description' => __( 'Show related jobs on single job pages.', 'jbportal' ),
+		) );
+	}
+
+	public function widget( $args, $instance ) {
+		if ( ! is_singular( 'job_listing' ) ) {
+			return;
+		}
+		$title = isset( $instance['title'] ) ? $instance['title'] : __( 'Related Jobs', 'jbportal' );
+		$limit = isset( $instance['limit'] ) ? (int) $instance['limit'] : 5;
+
+		$post_id = get_the_ID();
+		$cats    = wp_get_post_terms( $post_id, 'job_category', array( 'fields' => 'ids' ) );
+		$types   = wp_get_post_terms( $post_id, 'job_type', array( 'fields' => 'ids' ) );
+
+		$tax_query = array( 'relation' => 'OR' );
+		if ( $cats && ! is_wp_error( $cats ) ) {
+			$tax_query[] = array( 'taxonomy' => 'job_category', 'field' => 'term_id', 'terms' => $cats );
+		}
+		if ( $types && ! is_wp_error( $types ) ) {
+			$tax_query[] = array( 'taxonomy' => 'job_type', 'field' => 'term_id', 'terms' => $types );
+		}
+		if ( count( $tax_query ) <= 1 ) {
+			return;
+		}
+
+		$q = new WP_Query( array(
+			'post_type'      => 'job_listing',
+			'posts_per_page' => $limit,
+			'post__not_in'   => array( $post_id ),
+			'no_found_rows'  => true,
+			'tax_query'      => $tax_query,
+		) );
+
+		if ( ! $q->have_posts() ) {
+			return;
+		}
+
+		echo $args['before_widget']; // phpcs:ignore
+		if ( $title ) {
+			echo $args['before_title'] . esc_html( $title ) . $args['after_title']; // phpcs:ignore
+		}
+		echo '<ul class="jb-widget-jobs">';
+		while ( $q->have_posts() ) {
+			$q->the_post();
+			$company   = jbportal_get_job_company();
+			$type_terms = get_the_terms( get_the_ID(), 'job_type' );
+			$type_name  = ( $type_terms && ! is_wp_error( $type_terms ) ) ? $type_terms[0]->name : '';
+			printf(
+				'<li><a href="%1$s"><span class="jb-w-title">%2$s</span><span class="jb-w-meta">%3$s%4$s</span></a></li>',
+				esc_url( get_permalink() ),
+				esc_html( get_the_title() ),
+				esc_html( $company['name'] ),
+				$type_name ? ' &middot; <span class="jb-badge jb-badge-type">' . esc_html( $type_name ) . '</span>' : ''
+			);
+		}
+		echo '</ul>';
+		wp_reset_postdata();
+		echo $args['after_widget']; // phpcs:ignore
+	}
+
+	public function form( $instance ) {
+		$title = isset( $instance['title'] ) ? $instance['title'] : '';
+		$limit = isset( $instance['limit'] ) ? (int) $instance['limit'] : 5;
+		?>
+		<p><label><?php esc_html_e( 'Title:', 'jbportal' ); ?>
+			<input class="widefat" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>"></label></p>
+		<p><label><?php esc_html_e( 'Limit:', 'jbportal' ); ?>
+			<input class="tiny-text" name="<?php echo esc_attr( $this->get_field_name( 'limit' ) ); ?>" type="number" min="1" max="10" value="<?php echo esc_attr( $limit ); ?>"></label></p>
+		<?php
+	}
+
+	public function update( $new, $old ) {
+		return array(
+			'title' => sanitize_text_field( $new['title'] ?? '' ),
+			'limit' => max( 1, (int) ( $new['limit'] ?? 5 ) ),
+		);
+	}
+}
+
 function jbportal_register_widgets() {
 	register_widget( 'JBPortal_Recent_Jobs_Widget' );
 	register_widget( 'JBPortal_Job_Filter_Widget' );
 	register_widget( 'JBPortal_Featured_Companies_Widget' );
+	register_widget( 'JBPortal_Related_Jobs_Widget' );
 }
 add_action( 'widgets_init', 'jbportal_register_widgets' );
 

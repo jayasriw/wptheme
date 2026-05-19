@@ -158,15 +158,20 @@ get_header();
 						<th><?php esc_html_e( 'Submitted', 'jbportal' ); ?></th>
 						<th><?php esc_html_e( 'Status', 'jbportal' ); ?></th>
 						<th><?php esc_html_e( 'Resume', 'jbportal' ); ?></th>
+						<th><?php esc_html_e( 'Cover Letter', 'jbportal' ); ?></th>
 						<th><?php esc_html_e( 'Contact', 'jbportal' ); ?></th>
 					</tr></thead>
 					<tbody>
 					<?php foreach ( $apps as $a ) :
-						$name   = get_post_meta( $a->ID, '_application_name', true );
-						$email  = get_post_meta( $a->ID, '_application_email', true );
-						$resume = get_post_meta( $a->ID, '_application_resume_url', true );
-						$status = get_post_meta( $a->ID, '_application_status', true ) ?: 'new';
-						$job_id = (int) get_post_meta( $a->ID, '_application_job_id', true );
+						$name        = get_post_meta( $a->ID, '_application_name', true );
+						$email       = get_post_meta( $a->ID, '_application_email', true );
+						$resume      = get_post_meta( $a->ID, '_application_resume_url', true );
+						$status      = get_post_meta( $a->ID, '_application_status', true ) ?: 'new';
+						$job_id      = (int) get_post_meta( $a->ID, '_application_job_id', true );
+						$cover_letter = get_post_meta( $a->ID, '_application_cover_letter', true );
+						if ( ! $cover_letter ) {
+							$cover_letter = $a->post_content;
+						}
 						?>
 						<tr>
 							<td><?php echo esc_html( $name ); ?></td>
@@ -183,6 +188,7 @@ get_header();
 								</form>
 							</td>
 							<td><?php echo $resume ? '<a href="' . esc_url( $resume ) . '" target="_blank" rel="noopener">' . esc_html__( 'View', 'jbportal' ) . '</a>' : '—'; ?></td>
+							<td><?php if ( $cover_letter ) : ?><details><summary><?php esc_html_e( 'View', 'jbportal' ); ?></summary><div style="white-space:pre-wrap;max-width:400px;padding:.5rem 0"><?php echo esc_html( $cover_letter ); ?></div></details><?php else : ?>—<?php endif; ?></td>
 							<td><a href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ); ?></a></td>
 						</tr>
 					<?php endforeach; ?>

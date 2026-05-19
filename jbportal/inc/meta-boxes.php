@@ -127,7 +127,24 @@ function jbportal_candidate_details_cb( $post ) {
 	jbportal_text_field( $post->ID, '_candidate_resume_url', __( 'Resume URL', 'jbportal' ), 'url' );
 	jbportal_text_field( $post->ID, '_candidate_linkedin', __( 'LinkedIn', 'jbportal' ), 'url' );
 	jbportal_text_field( $post->ID, '_candidate_website', __( 'Personal Site', 'jbportal' ), 'url' );
+	jbportal_text_field( $post->ID, '_candidate_video_url', __( 'Video Introduction URL (YouTube/Vimeo)', 'jbportal' ), 'url' );
 	jbportal_checkbox_field( $post->ID, '_candidate_available', __( 'Available For Hire', 'jbportal' ) );
+	$vis = get_post_meta( $post->ID, '_candidate_resume_visibility', true ) ?: 'public';
+	?>
+	<p><label><strong><?php esc_html_e( 'Resume &amp; Contact Visibility', 'jbportal' ); ?></strong></label><br>
+		<select name="_candidate_resume_visibility" class="widefat">
+			<?php
+			foreach ( array(
+				'public'    => __( 'Public — everyone can see resume and contact info', 'jbportal' ),
+				'employers' => __( 'Employers only — requires employer account + membership', 'jbportal' ),
+				'private'   => __( 'Private — only the candidate and admins', 'jbportal' ),
+			) as $k => $l ) {
+				printf( '<option value="%s" %s>%s</option>', esc_attr( $k ), selected( $vis, $k, false ), esc_html( $l ) );
+			}
+			?>
+		</select>
+	</p>
+	<?php
 }
 
 function jbportal_save_meta( $post_id ) {
@@ -149,6 +166,7 @@ function jbportal_save_meta( $post_id ) {
 		'_company_founded', '_company_twitter', '_company_linkedin', '_company_facebook', '_company_verified',
 		'_candidate_title', '_candidate_location', '_candidate_email', '_candidate_phone', '_candidate_experience',
 		'_candidate_expected_salary', '_candidate_resume_url', '_candidate_linkedin', '_candidate_website', '_candidate_available',
+		'_candidate_video_url', '_candidate_resume_visibility',
 		'_application_status', '_application_name', '_application_email', '_application_phone', '_application_resume_url', '_application_job_id',
 		'_job_apply_phone', '_job_apply_type', '_job_video_url', '_job_allow_anon_apply',
 	);
@@ -156,7 +174,7 @@ function jbportal_save_meta( $post_id ) {
 	foreach ( $keys as $k ) {
 		if ( isset( $_POST[ $k ] ) ) {
 			$raw = wp_unslash( $_POST[ $k ] );
-			if ( in_array( $k, array( '_job_apply_url', '_company_website', '_company_twitter', '_company_linkedin', '_company_facebook', '_candidate_resume_url', '_candidate_linkedin', '_candidate_website' ), true ) ) {
+			if ( in_array( $k, array( '_job_apply_url', '_company_website', '_company_twitter', '_company_linkedin', '_company_facebook', '_candidate_resume_url', '_candidate_linkedin', '_candidate_website', '_candidate_video_url' ), true ) ) {
 				update_post_meta( $post_id, $k, esc_url_raw( $raw ) );
 			} elseif ( in_array( $k, array( '_job_apply_email', '_company_email', '_candidate_email' ), true ) ) {
 				update_post_meta( $post_id, $k, sanitize_email( $raw ) );
