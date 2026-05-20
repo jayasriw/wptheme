@@ -1,0 +1,3 @@
+/* jbportal admin styles */
+#jbportal_job_details .widefat, #jbportal_company_details .widefat, #jbportal_candidate_details .widefat { max-width: 480px; }
+#jbportal_job_details p, #jbportal_company_details p, #jbportal_candidate_details p { margin-bottom: 1rem; }
