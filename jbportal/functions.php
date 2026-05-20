@@ -95,6 +95,73 @@ function jbportal_widgets_init() {
 }
 add_action( 'widgets_init', 'jbportal_widgets_init' );
 
+/**
+ * Auto-create required pages on theme activation.
+ */
+function jbportal_create_pages() {
+	$pages = array(
+		array(
+			'slug'     => 'dashboard',
+			'title'    => 'Dashboard',
+			'template' => 'templates/template-dashboard.php',
+		),
+		array(
+			'slug'     => 'post-a-job',
+			'title'    => 'Post a Job',
+			'template' => 'templates/template-post-job.php',
+		),
+		array(
+			'slug'     => 'register',
+			'title'    => 'Register',
+			'template' => 'templates/template-register.php',
+		),
+		array(
+			'slug'     => 'employer-profile',
+			'title'    => 'Employer Profile',
+			'template' => 'templates/template-employer-profile.php',
+		),
+		array(
+			'slug'     => 'candidate-profile',
+			'title'    => 'Candidate Profile',
+			'template' => 'templates/template-candidate-profile.php',
+		),
+		array(
+			'slug'     => 'membership-plans',
+			'title'    => 'Membership Plans',
+			'content'  => '[jbportal_pricing]',
+		),
+	);
+
+	foreach ( $pages as $page ) {
+		$existing = get_page_by_path( $page['slug'] );
+		if ( $existing ) {
+			continue;
+		}
+		$id = wp_insert_post( array(
+			'post_type'   => 'page',
+			'post_status' => 'publish',
+			'post_title'  => $page['title'],
+			'post_name'   => $page['slug'],
+			'post_content' => $page['content'] ?? '',
+		) );
+		if ( $id && ! is_wp_error( $id ) && ! empty( $page['template'] ) ) {
+			update_post_meta( $id, '_wp_page_template', $page['template'] );
+		}
+	}
+
+	// Flush rewrite rules so CPT and new page slugs resolve correctly.
+	flush_rewrite_rules();
+}
+add_action( 'after_switch_theme', 'jbportal_create_pages' );
+
+// Also run once on init if pages are missing (handles zip installs where after_switch_theme already fired).
+add_action( 'init', function () {
+	if ( ! get_option( 'jbportal_pages_created' ) ) {
+		jbportal_create_pages();
+		update_option( 'jbportal_pages_created', '1' );
+	}
+}, 99 );
+
 require JBPORTAL_DIR . 'inc/enqueue.php';
 require JBPORTAL_DIR . 'inc/post-types.php';
 require JBPORTAL_DIR . 'inc/taxonomies.php';
